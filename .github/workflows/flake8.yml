@@ -21,5 +21,4 @@ jobs:
     - name: Install flake8 with dependencies
       run: poetry install --only lint
     - name: Analysing the code with flake8
-      run: |
-        flake8
+      run: poetry run flake8
