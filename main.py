@@ -1,5 +1,7 @@
 import time
-def myPrint(msg):
+
+
+def my_print(msg):
     """
     sdfsadf
     sdf
@@ -7,5 +9,8 @@ def myPrint(msg):
     """
     time.sleep(1)
     print(msg)
-myPrint('hello')
-b = {"a": 10, 'b': 15}
+
+
+my_print("hello")
+
+b = {"a": 10, "b": 15}

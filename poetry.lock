@@ -190,6 +190,17 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [[package]]
+name = "pep8-naming"
+version = "0.13.2"
+description = "Check PEP-8 naming conventions, plugin for flake8"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+flake8 = ">=3.9.1"
+
+[[package]]
 name = "platformdirs"
 version = "2.5.2"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
@@ -306,7 +317,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "279334050ce2d427eaa367d889de44893884c571050903df31d7876c1935d669"
+content-hash = "aa4332faa3155ec9442086f9b287a7db9a2c3eaad70224172502aefc876601fd"
 
 [metadata.files]
 asgiref = [
@@ -396,6 +407,10 @@ nodeenv = [
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},
     {file = "pathspec-0.9.0.tar.gz", hash = "sha256:e564499435a2673d586f6b2130bb5b95f04a3ba06f81b8f895b651a3c76aabb1"},
+]
+pep8-naming = [
+    {file = "pep8-naming-0.13.2.tar.gz", hash = "sha256:93eef62f525fd12a6f8c98f4dcc17fa70baae2f37fa1f73bec00e3e44392fa48"},
+    {file = "pep8_naming-0.13.2-py3-none-any.whl", hash = "sha256:59e29e55c478db69cffbe14ab24b5bd2cd615c0413edf790d47d3fb7ba9a4e23"},
 ]
 platformdirs = [
     {file = "platformdirs-2.5.2-py3-none-any.whl", hash = "sha256:027d8e83a2d7de06bbac4e5ef7e023c02b863d7ea5d079477e722bb41ab25788"},
