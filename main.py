@@ -1,5 +1,6 @@
-from django.db.models import Model
 import time
+
+
 def my_print(msg):
     """
     sdfsadf
@@ -8,5 +9,7 @@ def my_print(msg):
     """
     time.sleep(1)
     print(msg)
-my_print('hello')
+
+
+my_print("hello")
 b = {"a": 10, "b": 15}
