@@ -8,21 +8,39 @@
 
 
 1. [Режим разработки](#режим-разработки)
-   1. [Создание среды разработки](#cоздание-среды-разработки)
-   2. [Установка pre-commit хуков](#установка-pre-commit-хуков)
-2. [Управление зависимостями](#управление-зависимостями)
-3. [Flow работы с проектом](#flow-работы-с-проектом)
+   1. [Prerequisites](#prerequisites)
+   2. [Создание среды разработки](#cоздание-среды-разработки)
+   3. [Установка pre-commit хуков](#установка-pre-commit-хуков)
+   4. [Управление зависимостями](#управление-зависимостями)
+2. [Flow работы с проектом](#flow-работы-с-проектом)
 
 
 <h2 align="center">Режим разработки</h2>
 
 
-### Создание среды разработки
-#### 1. Установить Poetry
+### Prerequisites
+Мы рекомендуем вести разработку на Unix системах. Если вы используете Windows, то вы можете столкнуться с непреодолимыми сложностями, возникающими в случайном порядке. Тем не менее, Windows (даже Home версия) - это не проблема. Установите Docker desktop и создайте [docker dev environment](https://docs.docker.com/desktop/dev-environments/). Также вы можете использваоть виртуальные машины.
 
+Для успешного развертывания среды разработки вам понадобится:
+1. Docker (version ^20.10.8). Если у вас его еще нет, следуйте [инструкциям по установке](https://docs.docker.com/get-docker/);
+2. Docker-compose (version ^1.29.2). Обратитесь к официальной документации [для установки](https://docs.docker.com/compose/install/);
+3. [Pre-commit](https://pre-commit.com/#install).
+
+Также будет полезным:
+1. [Hadolint](https://github.com/hadolint/hadolint) - линтер докер файлов.
+
+### Создание среды разработки
+#### 1. Установить пакет libpq-dev
+**Важно:** этот пакет нужен для корректной работы `psycopg2`. Без этого пакета `psycopg2` не установится.
+```bash
+$ sudo apt update
+$ sudo apt install libpq-dev
+```
+
+#### 2. Установить Poetry
 **Linux, macOS, Windows (WSL)**
 ```bash
-> curl -sSL https://install.python-poetry.org | python3 - --version 1.2.0rc2
+$ curl -sSL https://install.python-poetry.org | python3 - --version 1.2.0rc2
 ```
 
 **Windows (Powershell)**
@@ -30,19 +48,23 @@
 > (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py - --version 1.2.0rc2
 ```
 Необходимо добавить путь к Poetry (`C:\Users\your-user-name\AppData\Roaming\Python\Scripts`) в переменную `PATH`. Затем перезапустить IDE.
-
-#### 2. Проверить, что Poetry установлен корректно
+#### 3. Проверить, что Poetry установлен корректно
 ```bash
-> poetry --version
+$ poetry --version
 Poetry (version 1.2.0rc2)
 ```
-#### 3. Создать и активировать виртуальную среду
+#### 4. Создать и активировать виртуальную среду
 ```bash
-> poetry shell
+$ poetry shell
 ```
-#### 4. Установить зависимости
+#### 5. Установить зависимости
 ```bash
-> poetry install
+$ poetry install
+```
+#### 6. Установить hadolint (опционально)
+```bash
+$ sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.10.0/hadolint-Linux-x86_64
+$ sudo chmod +x /bin/hadolint
 ```
 
 ### Установка pre-commit хуков
@@ -60,9 +82,7 @@ pre-commit 2.20.0
 pre-commit installed at .git/hooks/pre-commit
 ```
 
-
-<h2 align="center">Управление зависимостями</h2>
-
+### Управление зависимостями
 
 В качестве пакетного менеджера используется [Poetry version 1.2.0rc2](https://python-poetry.org/docs/1.2/#installation). Для управления зависимостями используются группы (см. файл `pyproject.toml`).
 

@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+    app:
+        build: .
+        command: python manage.py runserver 0.0.0.0:8000
+        ports:
+            - "8000:8000"
+        volumes:
+            - "./adminpanel:/app"
+
+# services:
+#     adminpanel:
+#         build:
+#             context: .
+#             dockerfile: ./adminpanel/docker/local/django/Dockerfile
+#         restart: always
+#         stdin_open: true # docker run -i
+#         tty: true        # docker run -t
+#         env_file:
+#             - ./adminpanel/.envs/.local/django/.env
+#         environment:
+#             - DJANGO_ENV=development
+#             - DJANGO_MANAGEPY_MIGRATE=on
+#             - COMPOSE_MODE=on
+#             - DB_HOST=postgres
+#         # command: gunicorn -b 0.0.0.0:8000 config.wsgi:application
+#         # working_dir: /app
+#         # volumes:
+#         #     # - ./adminpanel/src:/src1
+#         #     - type: bind
+#         #       source: ./adminpanel
+#         #       target: /src1
+#         volumes:
+#             # - ./adminpanel:/app
+#             - "./:/app"
+#         depends_on:
+#             - postgres
+#     postgres:
+#         build:
+#             context: ./
+#             dockerfile: ./adminpanel/docker/production/postgres/Dockerfile
+#         volumes:
+#             - pgdata:/var/lib/postgresql/data
+#         env_file:
+#             - ./adminpanel/.envs/.local/postgres/.env
+
+# volumes:
+#     pgdata:
