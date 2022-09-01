@@ -27,8 +27,8 @@ pep8-naming = "^0.13.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.6.0"
-pre-commit = "^2.20.0"
 isort = "^5.10.1"
+pre-commit = "^2.20.0"
 
 [tool.black]
 line-length = 110
