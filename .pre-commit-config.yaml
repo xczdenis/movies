@@ -13,11 +13,8 @@ repos:
                 entry: isort .
                 language: python
                 types: [ python ]
-    -   repo: https://github.com/compilerla/conventional-pre-commit
-        rev: v2.0.0
-        hooks:
-            - id: conventional-pre-commit
-              name: conventional commit
-              description: Checks commit message for Conventional Commits formatting
-              stages: [commit-msg]
-
+            -   id: conventional-pre-commit
+                name: conventional commit
+                description: Checks commit message for Conventional Commits formatting
+                entry: conventional-pre-commit
+                language: python
