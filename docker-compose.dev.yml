@@ -1,0 +1,32 @@
+services:
+    adminpanel:
+        build:
+            context: .
+            dockerfile: ./adminpanel/docker/development/django/Dockerfile
+        env_file:
+            - ./.envs/development/.env
+        environment:
+            - ENVIRONMENT=development
+            - DJANGO_MANAGEPY_MIGRATE=on
+            - COMPOSE_MODE=on
+            - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
+        volumes:
+            - ./adminpanel/src:/app
+        depends_on:
+            - postgres
+        ports:
+            - ${LOCAL_ADMINPANEL_PORT}:8000
+    postgres:
+        build:
+            context: ./
+            dockerfile: ./adminpanel/docker/production/postgres/Dockerfile
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        env_file:
+            - ./.envs/development/.env
+        ports:
+            - ${LOCAL_POSTGRES_PORT}:5432
+
+volumes:
+    pgdata:

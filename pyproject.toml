@@ -18,6 +18,7 @@ pydantic = "^1.9.2"
 python-decouple = "^3.6"
 loguru = "^0.6.0"
 django-filter = "^22.1"
+elasticsearch = {version = "7.9.1", extras = ["async"]}
 
 [tool.poetry.group.lint.dependencies]
 flake8 = "^5.0.4"
