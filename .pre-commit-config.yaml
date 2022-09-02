@@ -20,3 +20,4 @@ repos:
               name: conventional commit
               description: Checks commit message for Conventional Commits formatting
               stages: [commit-msg]
+
