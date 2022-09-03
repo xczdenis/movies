@@ -68,8 +68,11 @@ $ docker-compose -f docker-compose.prod.yml up -d --build
 
 #### Запуск сервиса adminpanel
 **Важно:** для запуска сервиса `adminpanel` локально у вас должна быть запущена база данных.
-Вы можете запустить проект через docker-compose, затем остановить контейнер `adminpanel`,
-а затем запустить сервис локально.
+
+Вы можете запустить базу данных отдельно:
+```bash
+$ docker-compose -f docker-compose.dev.yml up -d --build postgres
+```
 
 Для запуска сервиса `adminpanel` локально перейдите в каталог `adminpanel/src`:
 ```bash
