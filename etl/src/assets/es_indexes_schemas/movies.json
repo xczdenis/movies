@@ -45,12 +45,6 @@
             "id": {
                 "type": "keyword"
             },
-            "imdb_rating": {
-                "type": "float"
-            },
-            "genre": {
-                "type": "keyword"
-            },
             "title": {
                 "type": "text",
                 "analyzer": "ru_en",
@@ -64,15 +58,23 @@
                 "type": "text",
                 "analyzer": "ru_en"
             },
-            "director": {
-                "type": "text",
-                "analyzer": "ru_en"
+            "rating": {
+                "type": "float"
             },
-            "actors_names": {
-                "type": "text",
-                "analyzer": "ru_en"
+            "genres": {
+                "type": "nested",
+                "dynamic": "strict",
+                "properties": {
+                    "id": {
+                        "type": "keyword"
+                    },
+                    "name": {
+                        "type": "text",
+                        "analyzer": "ru_en"
+                    }
+                }
             },
-            "writers_names": {
+            "genres_names": {
                 "type": "text",
                 "analyzer": "ru_en"
             },
@@ -83,11 +85,15 @@
                     "id": {
                         "type": "keyword"
                     },
-                    "name": {
+                    "full_name": {
                         "type": "text",
                         "analyzer": "ru_en"
                     }
                 }
+            },
+            "actors_names": {
+                "type": "text",
+                "analyzer": "ru_en"
             },
             "writers": {
                 "type": "nested",
@@ -96,11 +102,19 @@
                     "id": {
                         "type": "keyword"
                     },
-                    "name": {
+                    "full_name": {
                         "type": "text",
                         "analyzer": "ru_en"
                     }
                 }
+            },
+            "writers_names": {
+                "type": "text",
+                "analyzer": "ru_en"
+            },
+            "director": {
+                "type": "text",
+                "analyzer": "ru_en"
             }
         }
     }

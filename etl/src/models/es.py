@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class Person(BaseModel):
@@ -11,19 +11,15 @@ class Genre(BaseModel):
     name: str
 
 
-class PersonInMovie(BaseModel):
-    id: str = Field(alias="person_id")
-    name: str = Field(alias="person_name")
-
-
 class Movie(BaseModel):
     id: str
-    imdb_rating: float = Field(alias="rating")
-    title: str = ""
-    genre: str = ""
+    title: str
     description: str = ""
-    director: str = ""
+    rating: float = 0.0
+    genres: list[Genre] = []
+    genres_names: str = ""
+    actors: list[Person] = []
     actors_names: str = ""
+    writers: list[Person] = []
     writers_names: str = ""
-    actors: list[PersonInMovie] = []
-    writers: list[PersonInMovie] = []
+    director: str = ""

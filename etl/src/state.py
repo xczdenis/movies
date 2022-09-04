@@ -29,6 +29,8 @@ class JsonFileStorage(BaseStorage):
         try:
             with open(self.file_path) as f:
                 return json.load(f)
+        except FileNotFoundError:
+            pass
         except Exception as e:
             logger.error(e)
             pass

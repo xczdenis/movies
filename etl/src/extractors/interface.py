@@ -1,8 +1,8 @@
 import abc
-from typing import Iterator
+from typing import Iterator, Optional
 
 
 class IExtractor:
     @abc.abstractmethod
-    def extract(self) -> Iterator[any]:
+    def extract(self) -> Optional[Iterator[any]]:
         pass

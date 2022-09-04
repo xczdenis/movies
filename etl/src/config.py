@@ -5,7 +5,7 @@ import const
 from models import pg as pg_models
 from pydantic import BaseSettings
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 
@@ -15,17 +15,20 @@ class Config(BaseSettings):
     POSTGRES_PASSWORD: str
     POSTGRES_HOST: str
     POSTGRES_PORT: str
-    POSTGRES_EXTRACTOR_BATCH_SIZE = 100
+    POSTGRES_EXTRACTOR_BATCH_SIZE = 500
     POSTGRES_SCHEME = "content"
 
     SQLITE_EXTRACTOR_BATCH_SIZE = 500
 
     ELASTIC_HOST: str
     ELASTIC_PORT: str
+
+    PG_TO_ES_REPEAT_INTERVAL: int = 0
+
     ES_INDEXES = {
-        const.INDEX_MOVIES: os.path.join(BASE_DIR, "files/pg_to_es/es_indexes_schemas/movies.json"),
-        const.INDEX_GENRES: os.path.join(BASE_DIR, "files/pg_to_es/es_indexes_schemas/genres.json"),
-        const.INDEX_PERSONS: os.path.join(BASE_DIR, "files/pg_to_es/es_indexes_schemas/persons.json"),
+        const.INDEX_MOVIES: os.path.join(BASE_DIR, "assets/es_indexes_schemas/movies.json"),
+        const.INDEX_GENRES: os.path.join(BASE_DIR, "assets/es_indexes_schemas/genres.json"),
+        const.INDEX_PERSONS: os.path.join(BASE_DIR, "assets/es_indexes_schemas/persons.json"),
     }
 
     TABLES_MAPPING = {

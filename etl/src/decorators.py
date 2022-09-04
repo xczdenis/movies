@@ -34,7 +34,7 @@ def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10, max_count=10):
                     if count == max_count:
                         break
                     time.sleep(timeout)
-                    timeout = timeout * 2 ** factor
+                    timeout = timeout * 2**factor
                     timeout = timeout if timeout < border_sleep_time else border_sleep_time
                     continue
 

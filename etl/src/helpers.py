@@ -15,10 +15,15 @@ def create_es_indexes(es_connection: Elasticsearch, indexes: dict):
     """
     for index, path_to_scheme in indexes.items():
         if not es_connection.indices.exists(index=index):
-            with open(path_to_scheme) as f:
-                try:
-                    schema = json.load(f)
-                except Exception as e:
-                    logger.error(e)
-                    raise e
-                es_connection.indices.create(index=index, body=schema)
+            try:
+                with open(path_to_scheme) as f:
+                    try:
+                        schema = json.load(f)
+                    except Exception as e:
+                        logger.error(e)
+                        raise e
+                    es_connection.indices.create(index=index, body=schema)
+            except FileNotFoundError:
+                logger.error(
+                    "{index} index schema file not found ({path})".format(index=index, path=path_to_scheme)
+                )

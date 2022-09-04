@@ -31,7 +31,7 @@ class IESTransformer(ITransformer):
             if instance_of_model:
                 transformed_data += [
                     {"index": {"_index": self.index_name, "_id": instance_of_model.id}},
-                    instance_of_model.dict(exclude={"id"}),
+                    instance_of_model.dict(exclude={"title"}),
                 ]
         return transformed_data
 

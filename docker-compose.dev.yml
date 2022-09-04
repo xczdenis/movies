@@ -19,14 +19,27 @@ services:
             - ${LOCAL_ADMINPANEL_PORT}:8000
     postgres:
         build:
-            context: ./
-            dockerfile: ./adminpanel/docker/production/postgres/Dockerfile
-        volumes:
-            - pgdata:/var/lib/postgresql/data
+            context: .
+            dockerfile: ./adminpanel/docker/development/postgres/Dockerfile
         env_file:
             - ./.envs/development/.env
+        volumes:
+            - pgdata:/var/lib/postgresql/data
         ports:
             - ${LOCAL_POSTGRES_PORT}:5432
+    es:
+        build:
+            context: .
+            dockerfile: ./search/docker/development/es/Dockerfile
+        env_file:
+            - ./.envs/development/.env
+        environment:
+            - discovery.type=single-node
+        volumes:
+            - esdata01:/usr/share/elasticsearch/data
+        ports:
+            - ${LOCAL_ELASTIC_PORT}:9200
 
 volumes:
     pgdata:
+    esdata01:
