@@ -130,14 +130,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
-name = "conventional-pre-commit"
-version = "2.0.0"
-description = "A pre-commit hook that checks commit messages for Conventional Commits formatting."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[[package]]
 name = "distlib"
 version = "0.3.6"
 description = "Distribution utilities"
@@ -610,7 +602,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "f5d5c4ed942413b9a65c20c270c25ed45f48a320b3333483288614b79935b424"
+content-hash = "6952731a0b54b382bbc1d4e3a81d9c9cac022385954945839036a4c1331efceb"
 
 [metadata.files]
 aiohttp = [
@@ -747,10 +739,6 @@ click = [
 colorama = [
     {file = "colorama-0.4.5-py2.py3-none-any.whl", hash = "sha256:854bf444933e37f5824ae7bfc1e98d5bce2ebe4160d46b5edf346a89358e99da"},
     {file = "colorama-0.4.5.tar.gz", hash = "sha256:e6c6b4334fc50988a639d9b98aa429a0b57da6e17b9a44f0451f930b6967b7a4"},
-]
-conventional-pre-commit = [
-    {file = "conventional_pre_commit-2.0.0-py3-none-any.whl", hash = "sha256:11bf5467b1f908b6818b6aa53c2c281973c234e29e62ccec89c5e6244474c1fa"},
-    {file = "conventional_pre_commit-2.0.0.tar.gz", hash = "sha256:bc03c1d76d7a083286d30367b99aa4610df0c9dd2887b68e672b1ad6fe1d0b7b"},
 ]
 distlib = [
     {file = "distlib-0.3.6-py2.py3-none-any.whl", hash = "sha256:f35c4b692542ca110de7ef0bea44d73981caeb34ca0b9b6b2e6d7790dda8f80e"},

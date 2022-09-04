@@ -24,11 +24,12 @@ def load_data():
             create_es_indexes(es_connection, config.ES_INDEXES)
 
             process = PGToESProcess(
-                es_connection=es_connection, pg_connection=pg_connection,
+                es_connection=es_connection,
+                pg_connection=pg_connection,
                 repeat_interval=config.PG_TO_ES_REPEAT_INTERVAL,
             )
             process.start()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     load_data()
