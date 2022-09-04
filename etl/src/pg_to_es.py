@@ -3,6 +3,7 @@ from clients.pg import PGClient
 from config import config
 from decorators import backoff
 from helpers import create_es_indexes
+from loguru import logger
 from processes.processes import PGToESProcess
 
 es_client = ESClient("{host}:{port}".format(host=config.ELASTIC_HOST, port=config.ELASTIC_PORT))
@@ -19,16 +20,23 @@ pg_client = PGClient(
 
 @backoff()
 def load_data():
-    with pg_client.connect() as pg_connection:
-        with es_client.connect() as es_connection:
-            create_es_indexes(es_connection, config.ES_INDEXES)
+    try:
+        with pg_client.connect() as pg_connection:
+            with es_client.connect() as es_connection:
+                create_es_indexes(es_connection, config.ES_INDEXES)
 
-            process = PGToESProcess(
-                es_connection=es_connection,
-                pg_connection=pg_connection,
-                repeat_interval=config.PG_TO_ES_REPEAT_INTERVAL,
-            )
-            process.start()
+                process = PGToESProcess(
+                    es_connection=es_connection,
+                    pg_connection=pg_connection,
+                    repeat_interval=config.PG_TO_ES_REPEAT_INTERVAL,
+                )
+                process.start()
+    except KeyboardInterrupt:
+        logger.info("Operation interrupted by user")
+        pg_client.close_connection(pg_connection)
+        es_client.close_connection(es_connection)
+    except Exception as e:
+        raise e
 
 
 if __name__ == "__main__":

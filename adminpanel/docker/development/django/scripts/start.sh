@@ -3,8 +3,7 @@ set -e
 
 if [ "x$COMPOSE_MODE" = 'xon' ]; then
     echo COMPOSE_MODE is on
-    echo waiting depends: postgres
-    /wait-for-it.sh postgres:5432 --
+    /wait-dependencies.sh
     echo Postgres is up!
 fi
 
