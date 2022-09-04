@@ -1,12 +1,11 @@
 repos:
     -   repo: local
         hooks:
-            -   id: flake8
-                name: flake8
-                description: Flake8 enforcement
-                entry: flake8
+            -   id: conventional-pre-commit
+                name: conventional commit
+                description: Checks commit message for Conventional Commits formatting
+                entry: conventional-pre-commit
                 language: python
-                types: [ python ]
             -   id: black
                 name: black
                 description: Format the code using black
@@ -19,8 +18,9 @@ repos:
                 entry: isort .
                 language: python
                 types: [ python ]
-            -   id: conventional-pre-commit
-                name: conventional commit
-                description: Checks commit message for Conventional Commits formatting
-                entry: conventional-pre-commit
+            -   id: flake8
+                name: flake8
+                description: Flake8 enforcement
+                entry: flake8
                 language: python
+                types: [ python ]
