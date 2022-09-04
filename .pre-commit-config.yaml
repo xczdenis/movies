@@ -3,8 +3,14 @@ repos:
         hooks:
             -   id: flake8
                 name: flake8
-                description: flake8 enforcement
+                description: Flake8 enforcement
                 entry: flake8
+                language: python
+                types: [ python ]
+            -   id: black
+                name: black
+                description: Format the code using black
+                entry: black
                 language: python
                 types: [ python ]
             -   id: isort
