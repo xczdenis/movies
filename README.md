@@ -173,7 +173,6 @@ $ pre-commit --version
 
 #### 2. Установка скриптов git hook
 ```bash
-$ pre-commit install
 $ pre-commit install --hook-type commit-msg
 
 # pre-commit installed at .git/hooks/pre-commit
