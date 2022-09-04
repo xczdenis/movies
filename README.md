@@ -281,6 +281,13 @@ commitizen check.........................................................Failed
 ### Форматер и линтер
 В качестве форматера мы используем [black](https://github.com/psf/black). Конфиг black см. в файле `pyproject.toml` в секции `[tool.black]`.
 Линтер - flake8, конфиг находится в файле `setup.cfg`.
+
+Если Вы используете PyCharm, то можете настроить форматирование файла с помощью black через External Tools:
+![add-external-tool.png](docs/assets/img/PyCharm/add-external-tool.png)
+Также можете повесить на это действие hot key:
+![add-hot-key.png](docs/assets/img/PyCharm/add-hot-key.png)
+
+
 <h2 align="center">Flow работы с проектом</h2>
 
 
