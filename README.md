@@ -268,7 +268,7 @@ ModuleNotFoundError: No module named 'src'
 Pre-commit хук `conventional-pre-commit` выполнит проверку комментария перед коммитом.
 Если ваш комментарий не соответствует конвенции, то в терминале вы увидите подобное сообщение:
 ```bash
-conventional commit......................................................Failed
+commitizen check.........................................................Failed
 - hook id: conventional-pre-commit
 - exit code: 1
 ```
