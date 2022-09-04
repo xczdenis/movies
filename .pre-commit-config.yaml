@@ -1,11 +1,11 @@
 repos:
+    -   repo: https://github.com/commitizen-tools/commitizen
+        rev: master
+        hooks:
+            -   id: commitizen
+                stages: [ commit-msg ]
     -   repo: local
         hooks:
-            -   id: conventional-pre-commit
-                name: conventional commit
-                description: Checks commit message for Conventional Commits formatting
-                entry: conventional-pre-commit
-                language: python
             -   id: black
                 name: black
                 description: Format the code using black
