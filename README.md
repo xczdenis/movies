@@ -119,10 +119,14 @@ $ sudo apt install libpq-dev
 ```
 
 #### 2. Установить Poetry
+Подробнее про установку Poetry [здесь](https://python-poetry.org/docs/#installation).
+
 **Linux, macOS, Windows (WSL)**
 ```bash
 $ curl -sSL https://install.python-poetry.org | python3 - --version 1.2.0rc2
 ```
+**Важно:** перезапустите ОС после установки Poetry. Также, после установки, необходимо добавить путь к Poetry в свой PATH. Как правило, это делается автоматически.
+Подробнее смотри в разделе [Add Poetry to your PATH](https://python-poetry.org/docs/#installation).
 
 **Windows (Powershell)**
 ```bash
@@ -130,13 +134,7 @@ $ curl -sSL https://install.python-poetry.org | python3 - --version 1.2.0rc2
 or
 > pip install poetry==1.2.0rc2
 ```
-Необходимо добавить путь к Poetry в переменную `PATH`. Затем перезапустить IDE. Узнать путь к `poetry` можно так:
-
-Linux:
-```bash
-$ which poetry
-```
-Windows:
+**Важно:** необходимо добавить путь к Poetry в переменную `PATH`. Затем перезапустить IDE. Узнать путь к `poetry` можно так:
 ```bash
 > where poetry
 ```
