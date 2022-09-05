@@ -13,7 +13,17 @@ class ESClient(IClient):
     @contextmanager
     def connect(self):
         conn = Elasticsearch(self.dsn)
-        logger.info("Elasticsearch database connection successfully established")
+        if conn.ping():
+            logger.info("Elasticsearch database connection successfully established")
         yield conn
         conn.close()
-        logger.info("Elasticsearch database connection closed")
+        ESClient.close_connection(connection=conn)
+
+    @staticmethod
+    def close_connection(connection: Elasticsearch):
+        try:
+            connection.close()
+        except Exception as e:
+            logger.error("Unable to close elasticsearch connection: {e}".format(e=e))
+        else:
+            logger.info("Elasticsearch database connection closed")

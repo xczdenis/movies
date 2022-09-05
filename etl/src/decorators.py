@@ -29,14 +29,18 @@ def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10, max_count=10):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
-                    logger.error(e)
-                    count += 1
-                    if count == max_count:
+                    try:
+                        logger.error(e)
+                        count += 1
+                        if count == max_count:
+                            break
+                        time.sleep(timeout)
+                        timeout = timeout * 2**factor
+                        timeout = timeout if timeout < border_sleep_time else border_sleep_time
+                        continue
+                    except KeyboardInterrupt:
+                        logger.info("Operation interrupted by user")
                         break
-                    time.sleep(timeout)
-                    timeout = timeout * 2**factor
-                    timeout = timeout if timeout < border_sleep_time else border_sleep_time
-                    continue
 
         return inner
 
