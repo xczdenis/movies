@@ -23,7 +23,6 @@ fastapi = "^0.82.0"
 orjson = "^3.8.0"
 aioredis = "^2.0.1"
 uvicorn = "^0.18.3"
-fastapi-pagination = "^0.10.0"
 
 [tool.poetry.group.lint.dependencies]
 flake8 = "^5.0.4"
