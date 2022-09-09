@@ -1,7 +1,9 @@
 import abc
 import json
+import os
 from typing import Any, Optional
 
+from config import BASE_DIR
 from loguru import logger
 
 
@@ -63,8 +65,8 @@ class MovieStorage(State):
     KEY_UPDATED_AT_GENRES = "last_updated_at_genres"
     KEY_UPDATED_AT_PERSONS = "last_updated_at_persons"
 
-    def __init__(self, path_to_json: str):
-        super().__init__(JsonFileStorage(path_to_json))
+    def __init__(self, path_to_json: Optional[str] = None):
+        super().__init__(JsonFileStorage(path_to_json or os.path.join(BASE_DIR, "state.json")))
 
     def set_last_update_movie(self, **kwargs):
         self.set_state_from_row_data(MovieStorage.KEY_UPDATED_AT_MOVIES, "updated_at", **kwargs)

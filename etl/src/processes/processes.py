@@ -51,7 +51,7 @@ class PGToESProcess(IProcess):
     es_connection: Elasticsearch
     pg_connection: psycopg2_connection
     repeat_interval: int = 0
-    storage: MovieStorage = MovieStorage("state.json")
+    storage: MovieStorage = MovieStorage()
 
     def start(self):
         es_loader = ElasticsearchLoader(connection=self.es_connection)
