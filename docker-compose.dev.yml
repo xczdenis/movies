@@ -39,6 +39,14 @@ services:
             - esdata01:/usr/share/elasticsearch/data
         ports:
             - ${LOCAL_ELASTIC_PORT}:9200
+    redis:
+        build:
+            context: .
+            dockerfile: ./search/docker/development/redis/Dockerfile
+        env_file:
+            - ./.envs/development/.env
+        ports:
+            - ${LOCAL_REDIS_PORT}:6379
 
 volumes:
     pgdata:

@@ -9,10 +9,6 @@ DOCKER_COMPOSE_PROD_FILE=docker-compose.prod.yml
 
 COMPOSE_OPTION_START_AS_DEMON=up -d --build
 
-SERVICE_ADMINPANEL=adminpanel
-SERVICE_POSTGRES=postgres
-SERVICE_ES=es
-
 
 define run_docker_compose
 	(docker-compose -f $(1) $(2) $(3))
