@@ -51,11 +51,6 @@ class Query:
             )
 
         return result_query
-        # return {
-        #     self.query_type: {
-        #         self.field: {"query": self.query, "operator": self.operator, "fuzziness": "AUTO"}
-        #     }
-        # }
 
 
 @dataclass
@@ -76,26 +71,6 @@ class BooleanQuery:
         for boolean_clause in self.boolean_clauses:
             query_boolean_clauses.update(boolean_clause.get_queries())
         return {"query": {"bool": query_boolean_clauses}}
-
-
-# async def make_request_body_from_kwargs(**kwargs) -> dict:
-#     filter = kwargs.get("filter")
-#     request_body = None
-#     if filter:
-#         boolean_clause = BooleanClause()
-#         for field_name, value in filter.items():
-#             if value:
-#                 lookups = field_name.split(LOOKUP_SEP)
-#                 if len(lookups) == 1:
-#                     boolean_clause.queries.append(Query(field=field_name, query=value))
-#                 else:
-#                     nested_query = Query(field=".".join(lookups), query=value)
-#                     boolean_clause.queries.append(Query(field=lookups[0], query=nested_query))
-#
-#         if len(boolean_clause.queries) > 0:
-#             request_body = BooleanQuery([boolean_clause]).get_query()
-#
-#     return request_body
 
 
 def get_occurrence_type_by_term(term: str):
@@ -125,22 +100,6 @@ async def make_request_body_from_kwargs(**kwargs) -> dict:
     return request_body
 
 
-async def get_index_from_model(model: Type[BaseModelWithMeta]) -> Optional[str]:
-    index = ""
-    try:
-        index = model.Meta.index
-    except Exception as e:
-        logger.error(e)
-
-    if not index:
-        logger.info(
-            "Unable to get index from model {model}. "
-            "Maybe you forget to add class Meta into model {model}.".format(model=model.__name__)
-        )
-
-    return index
-
-
 async def make_model_instance_from_doc(model: Type[BaseModel], doc: dict) -> Optional[BaseModel]:
     source = doc.get("_source")
     if source and isinstance(source, dict):
@@ -155,9 +114,9 @@ class ElasticDB(IAsyncDB):
     def __init__(self, host: str, port: int):
         self.client: AsyncElasticsearch = AsyncElasticsearch(hosts=[f"http://{host}:{port}"])
 
-    async def get(self, model: Type[BaseModel], id: str, **kwargs) -> Optional[BaseModel]:
+    async def get(self, model: Type[BaseModelWithMeta], id: str, **kwargs) -> Optional[BaseModel]:
         model_instance = None
-        index = await get_index_from_model(model)
+        index = model.get_index_name()
         if index:
             doc_type = kwargs.get("doc_type")
             params = kwargs.get("params")
@@ -174,14 +133,14 @@ class ElasticDB(IAsyncDB):
 
         return model_instance
 
-    async def search(self, model: Type[BaseModel], **kwargs) -> tuple[int, list[BaseModel]]:
+    async def search(self, model: Type[BaseModelWithMeta], **kwargs) -> tuple[int, list[BaseModel]]:
         page_size = kwargs.get("page_size", 10)
         page = kwargs.get("page", 1)
 
         total = 0
         objects = []
 
-        index = await get_index_from_model(model)
+        index = model.get_index_name()
         if index:
             request_body = await make_request_body_from_kwargs(**kwargs)
             resp = await self.execute_query(
@@ -206,9 +165,9 @@ class ElasticDB(IAsyncDB):
 
         return total, objects
 
-    async def count(self, model: Type[BaseModel], **kwargs) -> int:
+    async def count(self, model: Type[BaseModelWithMeta], **kwargs) -> int:
         resp = {}
-        index = await get_index_from_model(model)
+        index = model.get_index_name()
         if index:
             request_body = await make_request_body_from_kwargs(**kwargs)
             resp = await self.execute_query(index=index, query="count", body=request_body)

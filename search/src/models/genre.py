@@ -1,7 +1,7 @@
-from models.mixins import OrjsonConfigMixin, UUIDMixin
+from models.mixins import BaseModelWithMeta, OrjsonConfigMixin, UUIDMixin
 
 
-class Genre(UUIDMixin, OrjsonConfigMixin):
+class Genre(BaseModelWithMeta, UUIDMixin, OrjsonConfigMixin):
     name: str
 
     class Meta:

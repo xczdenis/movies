@@ -20,7 +20,7 @@ class BaseAPIService:
 
         data_from_cache = await self.cache_db.get(key=cache_key, **kwargs)
         if not data_from_cache:
-            logger.error(f"The data was not found in the cache (key: {cache_key})")
+            logger.debug(f"The data was not found in the cache (key: {cache_key})")
 
             model_instance = await self.db.get(model=model, id=object_id, **kwargs)
             if model_instance:
