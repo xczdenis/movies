@@ -7,7 +7,6 @@ services:
             - ./.envs/development/.env
         environment:
             - ENVIRONMENT=development
-            - DJANGO_MANAGEPY_MIGRATE=on
             - COMPOSE_MODE=on
             - POSTGRES_HOST=postgres
             - POSTGRES_PORT=5432
@@ -16,7 +15,7 @@ services:
         depends_on:
             - postgres
         ports:
-            - ${LOCAL_ADMINPANEL_PORT}:8000
+            - ${ADMINPANEL_PORT}:8000
     postgres:
         build:
             context: .
@@ -26,7 +25,7 @@ services:
         volumes:
             - pgdata:/var/lib/postgresql/data
         ports:
-            - ${LOCAL_POSTGRES_PORT}:5432
+            - ${POSTGRES_PORT}:5432
     es:
         build:
             context: .
@@ -38,7 +37,7 @@ services:
         volumes:
             - esdata01:/usr/share/elasticsearch/data
         ports:
-            - ${LOCAL_ELASTIC_PORT}:9200
+            - ${ELASTIC_PORT}:9200
     redis:
         build:
             context: .
@@ -46,7 +45,7 @@ services:
         env_file:
             - ./.envs/development/.env
         ports:
-            - ${LOCAL_REDIS_PORT}:6379
+            - ${REDIS_PORT}:6379
 
 volumes:
     pgdata:
