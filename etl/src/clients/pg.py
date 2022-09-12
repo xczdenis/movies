@@ -15,8 +15,13 @@ class PGClient(IClient):
     @contextmanager
     def connect(self):
         conn = psycopg2.connect(self.dsn, cursor_factory=RealDictCursor)
+        dsn_parameters = conn.get_dsn_parameters()
         conn.autocommit = True
-        logger.info("Postgres database connection successfully established")
+        logger.info(
+            "Postgres database connection successfully established ({host}:{port})".format(
+                host=dsn_parameters["host"], port=dsn_parameters["port"]
+            )
+        )
         yield conn
         conn.close()
         PGClient.close_connection(connection=conn)

@@ -14,7 +14,7 @@ class ESClient(IClient):
     def connect(self):
         conn = Elasticsearch(self.dsn)
         if conn.ping():
-            logger.info("Elasticsearch database connection successfully established")
+            logger.info(f"Elasticsearch database connection successfully established ({self.dsn})")
         yield conn
         conn.close()
         ESClient.close_connection(connection=conn)
