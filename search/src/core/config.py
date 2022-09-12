@@ -17,9 +17,13 @@ class Settings(BaseSettings):
     ELASTIC_PORT: int
     LOG_LEVEL: str = "DEBUG"
     JSON_LOGS: bool = False
+    TESTS_MAX_FILMS_NUMBER: int = 50
+    TESTS_MAX_PERSONS_NUMBER: int = 50
+    TESTS_MAX_GENRES_NUMBER: int = 50
 
     class Config:
-        env_file = os.path.join(ROOT_DIR, ".envs", "development", ".env")
+        env = os.getenv("ENVIRONMENT", "development")
+        env_file = os.path.join(ROOT_DIR, ".envs", env, ".env"), os.path.join(ROOT_DIR, ".env")
         env_file_encoding = "utf-8"
 
 
