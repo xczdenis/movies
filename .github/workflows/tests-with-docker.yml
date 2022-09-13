@@ -1,0 +1,15 @@
+name: Test with Docker
+
+on:
+  push:
+
+jobs:
+  test:
+    name: Run tests of the service "Search"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build docker-compose images
+      run: docker-compose -f docker-compose.yml -f docker-compose.test.yml build
+    - name: Run tests
+      run: docker-compose -f docker-compose.yml -f docker-compose.test.yml run tests_search
