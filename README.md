@@ -10,8 +10,9 @@
 1. [Запуск проекта](#запуск-проекта)
    1. [Настройка переменных окружения](#настройка-переменных-окружения)
    2. [Запуск проекта с помощью make](#запуск-проекта-с-помощью-make)
-   3. [Запуск проекта в докере](#запуск-проекта-в-докере)
-   4. [Запуск сервисов локально](#запуск-сервисов-локально)
+   3. [Запуск тестов](#запуск-тестов)
+   4. [Запуск проекта в докере](#запуск-проекта-в-докере)
+   5. [Запуск сервисов локально](#запуск-сервисов-локально)
 2. [Режим разработки](#режим-разработки)
    1. [Prerequisites](#prerequisites)
    2. [Создание среды разработки](#создание-среды-разработки)
@@ -32,7 +33,8 @@
 Все команды, приведенные в данном руководстве, выполняются из корневой директории проекта.
 
 ### Настройка переменных окружения
-После того как вы создали форк репозитория, нужно создать файлы `.env`.
+Первое, что нужно сделать, после того как вы создали форк репозитория - настроить переменные окружения.
+Для этого нужно создать файлы `.env`.
 Для каждого файла `.env` имеется свой файл `.env.template`.
 
 #### Локальные переменные окружения
@@ -53,14 +55,13 @@
 на Windows эти команды работать не будут.
 
 *Примечание:* для каждой команды существует 2 префикса: `dev` и `prod` (соответствуют режимам `development`
-и `production`). Ниже будут приведены команды,
-с префиксом `dev` - их также можно запускать с префиксом `prod`.
+и `production`). Ниже будут приведены команды, с префиксом `dev` - их также можно запускать с префиксом `prod`.
 
 #### Запустить все сервисы
 ```bash
 make dev
 
-# make prod - for productiom mode
+# make prod - run in production mode
 ```
 
 #### Запустить конкретный сервис
@@ -99,21 +100,48 @@ make sqlite-to-pg
 make pg-to-es
 ```
 
+### Запуск тестов
+Запустить тесты:
+```bash
+make test
+```
+Остановить запущенные контейнеры тестов:
+```bash
+make test-stop
+```
+Остановить и удалить запущенные контейнеры тестов:
+```bash
+make test-down
+```
+Проверить конфигурацию тестов:
+```bash
+make test-check
+```
+
+
 ### Запуск проекта в докере
-Запуск проекта выполняется с помощью docker-compose. Проект содержит 2 конфигурации docker-compose:
-* docker-compose.dev.yml - конфигурация для запуска в режиме разработки;
-* docker-compose.prod.yml - конфигурация для запуска в режиме production.
+Запуск проекта выполняется с помощью docker-compose. Проект содержит следующие файлы docker-compose:
+* docker-compose.yml - главный файл;
+* docker-compose.dev.yml - содержит **только изменения** относительно главного файла, необходимые для режима разработки;
+* docker-compose.test.yml - содержит **только изменения** для запуска тестов;
+* docker-compose.prod.yml - содержит **только изменения** для режима `production`;
+
+#### Запуск в режиме production
+Выполните следующую команду для запуска всех сервисов в режиме `production`:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+```
 
 #### Запуск в режиме разработки
 Выполните следующую команду для запуска всех сервисов в режиме разработки:
 ```bash
-$ docker-compose -f docker-compose.dev.yml up -d --build
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```
 
-#### Запуск в режиме production
-Выполните следующую команду для запуска всех сервисов в режиме разработки:
+#### Запуск тестов
+Выполните следующую команду для запуска тестов:
 ```bash
-$ docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
 ```
 
 ### Запуск сервисов локально
@@ -122,19 +150,23 @@ $ docker-compose -f docker-compose.prod.yml up -d --build
 #### Запуск сервиса adminpanel
 **Важно:** для запуска сервиса `adminpanel` локально у вас должна быть запущена база данных.
 
-Вы можете запустить базу данных отдельно:
+Вы можете запустить базу данных отдельно. Используя Make:
 ```bash
-$ docker-compose -f docker-compose.dev.yml up -d --build postgres
+make dev s=postgres
+```
+Вручную:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build postgres
 ```
 
 Для запуска сервиса `adminpanel` локально перейдите в каталог `adminpanel/src`:
 ```bash
-$ cd adminpanel/src
+cd adminpanel/src
 ```
 Примените миграции и выполните запуск сервиса:
 ```bash
-$ python manage.py migrate
-$ python manage.py runserver
+python manage.py migrate
+python manage.py runserver
 ```
 
 #### Перенос данных из sqlite в postgres
@@ -146,7 +178,7 @@ $ python manage.py runserver
 
 Для запуска переноса данных запустите файл `sqlite_to_pg.py`:
 ```bash
-$ python etl/src/sqlite_to_pg.py
+python etl/src/sqlite_to_pg.py
 ```
 Обратите внимание: сервис `sqlite_to_pg` по умолчанию запускается в режиме development,
 переменные окружения берутся из каталога `.envs/development`. Если вы хотите запустить перенос
@@ -170,8 +202,8 @@ $ python etl/src/sqlite_to_pg.py
 #### 1. Установить пакет libpq-dev
 **Важно:** этот пакет нужен для корректной работы `psycopg2`. Без этого пакета `psycopg2` не установится.
 ```bash
-$ sudo apt update
-$ sudo apt install libpq-dev
+sudo apt update
+sudo apt install libpq-dev
 ```
 
 #### 2. Установить Poetry
@@ -179,7 +211,7 @@ $ sudo apt install libpq-dev
 
 **Linux, macOS, Windows (WSL)**
 ```bash
-$ curl -sSL https://install.python-poetry.org | python3 - --version 1.2.0rc2
+curl -sSL https://install.python-poetry.org | python3 - --version 1.2.0rc2
 ```
 **Важно:** перезапустите ОС после установки Poetry. Также, после установки, необходимо добавить путь к Poetry в свой PATH. Как правило, это делается автоматически.
 Подробнее смотри в разделе [Add Poetry to your PATH](https://python-poetry.org/docs/#installation).
@@ -192,47 +224,51 @@ or
 ```
 **Важно:** необходимо добавить путь к Poetry в переменную `PATH`. Затем перезапустить IDE. Узнать путь к `poetry` можно так:
 ```bash
-> where poetry
+where poetry
 ```
 
 #### 3. Проверить, что Poetry установлен корректно
 ```bash
-$ poetry --version
+poetry --version
 
 # Poetry (version 1.2.0rc2)
 ```
 
 #### 4. Создать и активировать виртуальную среду
 ```bash
-$ poetry shell
+poetry shell
 ```
 
 #### 5. Установить зависимости
 ```bash
-$ poetry install
+poetry install
 ```
 
 #### 6. Установить hadolint (опционально)
 ```bash
-$ sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.10.0/hadolint-Linux-x86_64
-$ sudo chmod +x /bin/hadolint
+sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.10.0/hadolint-Linux-x86_64
+sudo chmod +x /bin/hadolint
 ```
 
 ### Установка pre-commit хуков
 #### 1. Проверка установки pre-commit
 Пакет [pre-commit](https://pre-commit.com/) включен в список зависимостей и устанавливается командой `poetry install`. Для проверки корректности установки `pre-commit` нужно выполнить команду:
 ```bash
-$ pre-commit --version
-
-# pre-commit 2.20.0
+pre-commit --version
+```
+В ответ вы должны получить версию pre-commit - это значит, что все установлено корректно:
+```bash
+pre-commit 2.20.0
 ```
 
 #### 2. Установка скриптов git hook
 ```bash
-$ pre-commit install
-$ pre-commit install --hook-type commit-msg
-
-# pre-commit installed at .git/hooks/pre-commit
+pre-commit install
+pre-commit install --hook-type commit-msg
+```
+Если установка прошла успешно, то увидите следующее сообщение:
+```bash
+pre-commit installed at .git/hooks/pre-commit
 ```
 
 
@@ -254,7 +290,7 @@ Django = "^4.1"
 ```
 Добавление основной зависимости:
 ```bash
-$ poetry add pendulum
+poetry add pendulum
 ```
 Остальные зависимости делятся на группы. Например, группа `lint` - зависимостей для линтинга:
 ```
@@ -266,7 +302,7 @@ pep8-naming = "^0.13.2"
 ```
 Добавление зависимости в конкретную группу (использовать флаг `--group` и название группы):
 ```bash
-$ poetry add pytest --group test
+poetry add pytest --group test
 ```
 
 ### Структура каталогов
