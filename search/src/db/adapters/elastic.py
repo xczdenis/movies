@@ -166,13 +166,18 @@ class ElasticDB(IAsyncDB):
         return total, objects
 
     async def count(self, model: Type[BaseModelWithMeta], **kwargs) -> int:
-        resp = {}
+        count = 0
+        resp = None
         index = model.get_index_name()
         if index:
             request_body = await make_request_body_from_kwargs(**kwargs)
             resp = await self.execute_query(index=index, query="count", body=request_body)
+            logger.debug(f"TEST = {resp}")
 
-        return resp.get("count", 0)
+        if resp:
+            count = resp.get("count", 0)
+
+        return count
 
     async def execute_query(
         self, index: str, query: str, body: Optional[dict] = None, params: Optional[dict] = None

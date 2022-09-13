@@ -1,0 +1,53 @@
+services:
+    adminpanel:
+        build:
+            context: .
+            dockerfile: ./adminpanel/docker/${ENVIRONMENT:-production}/app/Dockerfile
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - COMPOSE_MODE=on
+            - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
+        depends_on:
+            - postgres
+    search:
+        build:
+            context: .
+            dockerfile: ./search/docker/${ENVIRONMENT:-production}/app/Dockerfile
+        image: app-search-img
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - COMPOSE_MODE=on
+            - SEARCH_APP_HOST=0.0.0.0
+            - SEARCH_APP_PORT=8000
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+            - ELASTIC_HOST=es
+            - ELASTIC_PORT=9200
+        depends_on:
+            - es
+            - redis
+    postgres:
+        build:
+            context: .
+            dockerfile: ./adminpanel/docker/${ENVIRONMENT:-production}/postgres/Dockerfile
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+    es:
+        build:
+            context: .
+            dockerfile: ./search/docker/${ENVIRONMENT:-production}/es/Dockerfile
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - discovery.type=single-node
+    redis:
+        build:
+            context: .
+            dockerfile: ./search/docker/${ENVIRONMENT:-production}/redis/Dockerfile
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env

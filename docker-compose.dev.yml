@@ -1,52 +1,32 @@
 services:
     adminpanel:
-        build:
-            context: .
-            dockerfile: ./adminpanel/docker/development/django/Dockerfile
-        env_file:
-            - ./.envs/development/.env
         environment:
             - ENVIRONMENT=development
-            - COMPOSE_MODE=on
-            - POSTGRES_HOST=postgres
-            - POSTGRES_PORT=5432
         volumes:
             - ./adminpanel/src:/app
-        depends_on:
-            - postgres
         ports:
-            - ${ADMINPANEL_PORT}:8000
-    postgres:
-        build:
-            context: .
-            dockerfile: ./adminpanel/docker/development/postgres/Dockerfile
-        env_file:
-            - ./.envs/development/.env
+            - ${ADMINPANEL_APP_PORT}:8000
+    search:
+        environment:
+            - ENVIRONMENT=development
         volumes:
-            - pgdata:/var/lib/postgresql/data
+            - ./search/src:/app
+        ports:
+            - ${SEARCH_APP_PORT}:8000
+    postgres:
+        volumes:
+            - pgdata_dev:/var/lib/postgresql/data
         ports:
             - ${POSTGRES_PORT}:5432
     es:
-        build:
-            context: .
-            dockerfile: ./search/docker/development/es/Dockerfile
-        env_file:
-            - ./.envs/development/.env
-        environment:
-            - discovery.type=single-node
         volumes:
-            - esdata01:/usr/share/elasticsearch/data
+            - esdata01_dev:/usr/share/elasticsearch/data
         ports:
             - ${ELASTIC_PORT}:9200
     redis:
-        build:
-            context: .
-            dockerfile: ./search/docker/development/redis/Dockerfile
-        env_file:
-            - ./.envs/development/.env
         ports:
             - ${REDIS_PORT}:6379
 
 volumes:
-    pgdata:
-    esdata01:
+    pgdata_dev:
+    esdata01_dev:

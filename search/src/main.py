@@ -36,5 +36,8 @@ if __name__ == "__main__":
     setup_logging(settings.LOG_LEVEL, settings.JSON_LOGS)
 
     uvicorn.run(
-        "main:app", host=settings.APP_HOST, port=int(settings.APP_PORT), log_config=UVICORN_LOGGING_CONFIG
+        "main:app",
+        host=settings.SEARCH_APP_HOST,
+        port=int(settings.SEARCH_APP_PORT),
+        log_config=UVICORN_LOGGING_CONFIG,
     )

@@ -1,0 +1,55 @@
+services:
+    search:
+        environment:
+            - ENVIRONMENT=development
+        volumes:
+            - ./search/src:/app
+        ports:
+            - ${SEARCH_APP_PORT}:8000
+    adminpanel:
+        environment:
+            - ENVIRONMENT=development
+        volumes:
+            - ./adminpanel/src:/app
+        depends_on:
+            - postgres
+        ports:
+            - ${ADMINPANEL_APP_PORT}:8000
+    postgres:
+        volumes:
+            - pgdata_test:/var/lib/postgresql/data
+        ports:
+            - ${POSTGRES_PORT}:5432
+    es:
+        volumes:
+            - esdata01_test:/usr/share/elasticsearch/data
+        ports:
+            - ${ELASTIC_PORT}:9200
+    redis:
+        ports:
+            - ${REDIS_PORT}:6379
+    tests_search:
+        build:
+            context: .
+            dockerfile: ./search/docker/${ENVIRONMENT:-production}/tests/Dockerfile
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - ENVIRONMENT=development
+            - COMPOSE_MODE=on
+            - SEARCH_APP_HOST=search
+            - SEARCH_APP_PORT=8000
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+            - ELASTIC_HOST=es
+            - ELASTIC_PORT=9200
+        volumes:
+            - ./search/src:/app
+        depends_on:
+            - es
+            - redis
+            - search
+
+volumes:
+    pgdata_test:
+    esdata01_test:
