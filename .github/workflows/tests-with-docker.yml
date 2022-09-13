@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         COMPOSE_PROJECT_NAME: movies
+        ENVIRONMENT: development
         ADMINPANEL_APP_PORT: ${{ secrets.ADMINPANEL_APP_PORT }}
         SEARCH_APP_PORT: ${{ secrets.SEARCH_APP_PORT }}
         POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
