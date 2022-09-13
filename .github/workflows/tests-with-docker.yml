@@ -7,6 +7,13 @@ jobs:
   test:
     name: Run tests of the service "Search"
     runs-on: ubuntu-latest
+    env:
+        COMPOSE_PROJECT_NAME: movies
+        ADMINPANEL_APP_PORT: ${{ secrets.ADMINPANEL_APP_PORT }}
+        SEARCH_APP_PORT: ${{ secrets.SEARCH_APP_PORT }}
+        POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+        ELASTIC_PORT: ${{ secrets.ELASTIC_PORT }}
+        REDIS_PORT: ${{ secrets.REDIS_PORT }}
     steps:
     - uses: actions/checkout@v3
     - name: Build docker-compose images
