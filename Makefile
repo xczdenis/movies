@@ -203,6 +203,7 @@ gha-make-env-file-prod:
 
 
 ci-show-envs-prod:
+	cat .env-temp
 	cat .envs/production/.env
 
 ci-tests-config:
