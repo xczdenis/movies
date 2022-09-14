@@ -1,4 +1,4 @@
-PROJECT_NAME=movies
+DEFAULT_PROJECT_NAME=movies
 
 PREFIX_DEV=dev
 PREFIX_TEST=test
@@ -65,7 +65,7 @@ endif
 
 # set COMPOSE_PROJECT_NAME if it is not defined
 ifeq ($(COMPOSE_PROJECT_NAME),)
-	COMPOSE_PROJECT_NAME=$(PROJECT_NAME)
+	COMPOSE_PROJECT_NAME=$(DEFAULT_PROJECT_NAME)
 endif
 
 
@@ -203,7 +203,7 @@ gha-make-env-file-prod:
 
 
 ci-tests-build:
-	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),build)
+	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),config)
 
 
 ci-run-tests:
