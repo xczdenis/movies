@@ -1,0 +1,21 @@
+services:
+    adminpanel:
+        environment:
+            - ENVIRONMENT=production
+        ports:
+            - ${ADMINPANEL_APP_PORT}:8000
+    search:
+        environment:
+            - ENVIRONMENT=production
+        ports:
+            - ${SEARCH_APP_PORT}:8000
+    postgres:
+        volumes:
+            - pgdata_prod:/var/lib/postgresql/data
+    es:
+        volumes:
+            - esdata01_prod:/usr/share/elasticsearch/data
+
+volumes:
+    pgdata_prod:
+    esdata01_prod:

@@ -1,6 +1,8 @@
-FROM python:3.10-slim
+ARG env=${ENVIRONMENT:-production}
 
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 ENVIRONMENT=development
+FROM python:3.10-slim as builder
+
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
 ARG HOME_DIR=/app
 WORKDIR $HOME_DIR
@@ -21,7 +23,14 @@ COPY ./pyproject.toml ./poetry.lock /
 RUN poetry config virtualenvs.create false \
     && poetry install --only main
 
-COPY ./search/docker/development/app/scripts /scripts
+COPY ./adminpanel/docker/app/scripts /scripts
 RUN chmod -R 777 /scripts
+
+FROM builder as development
+
+FROM builder as production
+COPY ./adminpanel/src .
+
+FROM ${env}
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]

@@ -2,11 +2,12 @@ services:
     adminpanel:
         build:
             context: .
-            dockerfile: ./adminpanel/docker/${ENVIRONMENT:-production}/app/Dockerfile
+            dockerfile: ./adminpanel/docker/app/Dockerfile
         restart: on-failure
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env
         environment:
+            - ENVIRONMENT=${ENVIRONMENT:-production}
             - COMPOSE_MODE=on
             - POSTGRES_HOST=postgres
             - POSTGRES_PORT=5432
@@ -15,12 +16,13 @@ services:
     search:
         build:
             context: .
-            dockerfile: ./search/docker/${ENVIRONMENT:-production}/app/Dockerfile
+            dockerfile: ./search/docker/app/Dockerfile
         image: app-search-img
         restart: on-failure
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env
         environment:
+            - ENVIRONMENT=${ENVIRONMENT:-production}
             - COMPOSE_MODE=on
             - SEARCH_APP_HOST=0.0.0.0
             - SEARCH_APP_PORT=8000
@@ -34,13 +36,13 @@ services:
     postgres:
         build:
             context: .
-            dockerfile: ./adminpanel/docker/${ENVIRONMENT:-production}/postgres/Dockerfile
+            dockerfile: ./adminpanel/docker/postgres/Dockerfile
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env
     es:
         build:
             context: .
-            dockerfile: ./search/docker/${ENVIRONMENT:-production}/es/Dockerfile
+            dockerfile: ./search/docker/es/Dockerfile
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env
         environment:
@@ -48,6 +50,6 @@ services:
     redis:
         build:
             context: .
-            dockerfile: ./search/docker/${ENVIRONMENT:-production}/redis/Dockerfile
+            dockerfile: ./search/docker/redis/Dockerfile
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env

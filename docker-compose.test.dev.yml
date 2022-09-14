@@ -1,0 +1,28 @@
+services:
+    adminpanel:
+        volumes:
+            - ./adminpanel/src:/app
+        ports:
+            - ${ADMINPANEL_APP_PORT}:8000
+    search:
+        volumes:
+            - ./search/src:/app
+        ports:
+            - ${SEARCH_APP_PORT}:8000
+    postgres:
+        volumes:
+            - pgdata_test:/var/lib/postgresql/data
+        ports:
+            - ${POSTGRES_PORT}:5432
+    es:
+        volumes:
+            - esdata01_test:/usr/share/elasticsearch/data
+        ports:
+            - ${ELASTIC_PORT}:9200
+    tests_search:
+        volumes:
+            - ./search/src:/app
+
+volumes:
+    pgdata_test:
+    esdata01_test:

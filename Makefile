@@ -1,30 +1,33 @@
 PROJECT_NAME=movies
 
-ENV_DEV=dev
-ENV_TEST=test
-ENV_PROD=prod
+PREFIX_DEV=dev
+PREFIX_TEST=test
+PREFIX_PROD=prod
 
-TARGET_PREFIX_DEV=dev
-TARGET_PREFIX_PROD=prod
-TARGET_PREFIX_TEST=test
-TARGET_PREFIX_CHECK=check
-TARGET_PREFIX_STOP=stop
-TARGET_PREFIX_DOWN=down
+PREFIX_CHECK=check
+PREFIX_STOP=stop
+PREFIX_DOWN=down
 
-RUN_DEV=$(TARGET_PREFIX_DEV)
-RUN_DEV_CHECK=$(TARGET_PREFIX_DEV)-$(TARGET_PREFIX_CHECK)
-RUN_DEV_STOP=$(TARGET_PREFIX_DEV)-$(TARGET_PREFIX_STOP)
-RUN_DEV_DOWN=$(TARGET_PREFIX_DEV)-$(TARGET_PREFIX_DOWN)
+RUN_PROD=$(PREFIX_PROD)
+RUN_PROD_CHECK=$(PREFIX_PROD)-$(PREFIX_CHECK)
+RUN_PROD_STOP=$(PREFIX_PROD)-$(PREFIX_STOP)
+RUN_PROD_DOWN=$(PREFIX_PROD)-$(PREFIX_DOWN)
 
-RUN_TEST=$(TARGET_PREFIX_TEST)
-RUN_TEST_CHECK=$(TARGET_PREFIX_TEST)-$(TARGET_PREFIX_CHECK)
-RUN_TEST_STOP=$(TARGET_PREFIX_TEST)-$(TARGET_PREFIX_STOP)
-RUN_TEST_DOWN=$(TARGET_PREFIX_TEST)-$(TARGET_PREFIX_DOWN)
+RUN_DEV=$(PREFIX_DEV)
+RUN_DEV_CHECK=$(PREFIX_DEV)-$(PREFIX_CHECK)
+RUN_DEV_STOP=$(PREFIX_DEV)-$(PREFIX_STOP)
+RUN_DEV_DOWN=$(PREFIX_DEV)-$(PREFIX_DOWN)
+
+RUN_TEST=$(PREFIX_TEST)
+RUN_TEST_CHECK=$(PREFIX_TEST)-$(PREFIX_CHECK)
+RUN_TEST_STOP=$(PREFIX_TEST)-$(PREFIX_STOP)
+RUN_TEST_DOWN=$(PREFIX_TEST)-$(PREFIX_DOWN)
 
 DOCKER_COMPOSE_MAIN_FILE=docker-compose.yml
 DOCKER_COMPOSE_DEV_FILE=docker-compose.dev.yml
 DOCKER_COMPOSE_PROD_FILE=docker-compose.prod.yml
 DOCKER_COMPOSE_TEST_FILE=docker-compose.test.yml
+DOCKER_COMPOSE_TEST_DEV_FILE=docker-compose.test.dev.yml
 
 COMPOSE_OPTION_START_AS_DEMON=up -d --build
 
@@ -89,8 +92,9 @@ define write_to_file
 endef
 
 
-down: $(RUN_DEV_DOWN) $(RUN_TEST_DOWN)
+down: $(RUN_PROD_DOWN) $(RUN_DEV_DOWN) $(RUN_TEST_DOWN)
 	$(call log,Down containers $(COMPOSE_PROJECT_NAME))
+	docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(DOCKER_COMPOSE_PROD_FILE) down
 	docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(DOCKER_COMPOSE_DEV_FILE) down
 	docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(DOCKER_COMPOSE_TEST_FILE) down
 
@@ -106,26 +110,49 @@ pg-to-es:
 
 
 #############
+# PROD
+#############
+$(RUN_PROD): down
+	$(call log,Run containers (PROD))
+	ENVIRONMENT=production $(call run_docker_compose,$(PREFIX_PROD),$(DOCKER_COMPOSE_PROD_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
+
+
+$(RUN_PROD_CHECK):
+	$(call log,Check configuration (PROD))
+	ENVIRONMENT=production $(call run_docker_compose,$(PREFIX_PROD),$(DOCKER_COMPOSE_PROD_FILE),config)
+
+
+$(RUN_PROD_STOP):
+	$(call log,Stop running containers (PROD))
+	ENVIRONMENT=production $(call run_docker_compose,$(PREFIX_PROD),$(DOCKER_COMPOSE_PROD_FILE),stop,$(s))
+
+
+$(RUN_PROD_DOWN):
+	$(call log,Down running containers (PROD))
+	ENVIRONMENT=production $(call run_docker_compose,$(PREFIX_PROD),$(DOCKER_COMPOSE_PROD_FILE),down)
+
+
+#############
 # DEV
 #############
 $(RUN_DEV): down
 	$(call log,Run containers (DEV))
-	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
+	$(call run_docker_compose,$(PREFIX_DEV),$(DOCKER_COMPOSE_DEV_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
 
 
 $(RUN_DEV_CHECK):
 	$(call log,Check configuration (DEV))
-	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),config)
+	$(call run_docker_compose,$(PREFIX_DEV),$(DOCKER_COMPOSE_DEV_FILE),config)
 
 
 $(RUN_DEV_STOP):
 	$(call log,Stop running containers (DEV))
-	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),stop,$(s))
+	$(call run_docker_compose,$(PREFIX_DEV),$(DOCKER_COMPOSE_DEV_FILE),stop,$(s))
 
 
 $(RUN_DEV_DOWN):
 	$(call log,Down running containers (DEV))
-	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),down)
+	$(call run_docker_compose,$(PREFIX_DEV),$(DOCKER_COMPOSE_DEV_FILE),down)
 
 
 #############
@@ -133,30 +160,30 @@ $(RUN_DEV_DOWN):
 #############
 $(RUN_TEST): down
 	$(call log,Run containers (TEST))
-	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
+	$(call run_docker_compose,$(PREFIX_TEST),$(DOCKER_COMPOSE_TEST_FILE) -f $(DOCKER_COMPOSE_TEST_DEV_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
 
 
-$(RUN_TEST)-it: $(RUN_TEST_DOWN) $(RUN_DEV_DOWN)
+$(RUN_TEST)-it: down
 	$(call log,Build test containers)
-	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),build)
+	$(call run_docker_compose,$(PREFIX_TEST),$(DOCKER_COMPOSE_TEST_FILE) -f $(DOCKER_COMPOSE_TEST_DEV_FILE),build)
 
 	$(call log,Run tests for service search)
-	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),run,tests_search)
+	$(call run_docker_compose,$(PREFIX_TEST),$(DOCKER_COMPOSE_TEST_FILE) -f $(DOCKER_COMPOSE_TEST_DEV_FILE),run,tests_search)
 
 
 $(RUN_TEST_CHECK):
 	$(call log,Check configuration (TEST))
-	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),config)
+	$(call run_docker_compose,$(PREFIX_TEST),$(DOCKER_COMPOSE_TEST_FILE) -f $(DOCKER_COMPOSE_TEST_DEV_FILE),config)
 
 
 $(RUN_TEST_STOP):
 	$(call log,Stop running containers (TEST))
-	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),stop,$(s))
+	$(call run_docker_compose,$(PREFIX_TEST),$(DOCKER_COMPOSE_TEST_FILE),stop,$(s))
 
 
 $(RUN_TEST_DOWN):
 	$(call log,Down running containers (TEST))
-	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),down)
+	$(call run_docker_compose,$(PREFIX_TEST),$(DOCKER_COMPOSE_TEST_FILE),down)
 
 
 #############
@@ -168,9 +195,15 @@ gha-make-env-file-dev:
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/development/.env
 
 
+gha-make-env-file-prod:
+	$(call create_file,.env-tmp)
+	$(call write_to_file,.env-tmp,${{ secrets.ENVS-PROD }})
+	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/production/.env
+
+
 ci-test-build:
-	$(call run_docker_compose,'test',$(DOCKER_COMPOSE_TEST_FILE),build)
+	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),build)
 
 
 ci-run-test-search:
-	$(call run_docker_compose,'test',$(DOCKER_COMPOSE_TEST_FILE),run tests_search)
+	@$(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),run tests_search)
