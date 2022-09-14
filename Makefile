@@ -200,10 +200,10 @@ gha-make-env-file-prod:
 	$(call write_to_file,.env-tmp,$(ENVS_PROD))
 	$(call write_to_file,.env-tmp,TEST=TEST)
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/production/.env
+	cat .env-temp
 
 
 ci-show-envs-prod:
-	cat .env-temp
 	cat .envs/production/.env
 
 ci-tests-config:
