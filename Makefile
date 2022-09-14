@@ -198,13 +198,13 @@ gha-make-env-file-dev:
 gha-make-env-file-prod:
 	$(call create_file,.env-tmp)
 	$(call write_to_file,.env-tmp,${{ secrets.ENVS_PROD }})
+	@echo ${{ secrets.ENVS_PROD }}
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/production/.env
 	cat .envs/production/.env
 
 
 ci-show-envs-prod-1:
-	APP=$$(cat ./.envs/production/.env); \
-	echo $$APP
+	cat .envs/production/.env.template
 
 ci-show-envs-prod-2:
 	APP=$$(cat .envs/production/.env); \
