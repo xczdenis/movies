@@ -210,6 +210,13 @@ ci-show-envs-prod-2:
 	APP=$$(cat .envs/production/.env); \
 	echo $$APP
 
+ci-show-envs-prod-3:
+	APP=$$(cat ./.envs/production/.env.template); \
+	echo $$APP
+
+ci-show-envs-prod-4:
+	cat .envs/production/.env.template
+
 ci-tests-config:
 	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),config)
 
