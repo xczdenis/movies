@@ -202,6 +202,12 @@ gha-make-env-file-prod:
 	cat .envs/production/.env
 
 
+ci-show-envs-prod-1:
+	cat .envs/production/.env
+
+ci-show-envs-prod-2:
+	cat ./.envs/production/.env
+
 ci-tests-config:
 	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),config)
 

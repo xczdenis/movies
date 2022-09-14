@@ -15,7 +15,11 @@ jobs:
       uses: actions/checkout@v3
     - name: Create env file
       run: make gha-make-env-file-prod
-    - name: Build docker-compose images for tests
-      run: make ci-tests-build
-    - name: Run tests for service search
-      run: make ci-run-tests s=tests_search
+    - name: Show env file-1
+      run: make ci-show-envs-prod-1
+    - name: Show env file-2
+      run: make ci-show-envs-prod-2
+#    - name: Build docker-compose images for tests
+#      run: make ci-tests-build
+#    - name: Run tests for service search
+#      run: make ci-run-tests s=tests_search
