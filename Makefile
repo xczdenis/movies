@@ -199,6 +199,7 @@ gha-make-env-file-prod:
 	$(call create_file,.env-tmp)
 	$(call write_to_file,.env-tmp,${{ secrets.ENVS_PROD }})
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/production/.env
+	cat .envs/production/.env
 
 
 ci-tests-build:

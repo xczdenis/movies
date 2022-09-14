@@ -16,6 +16,9 @@ jobs:
     - name: Create env file
       run: make gha-make-env-file-prod
     - name: Build docker-compose images for tests
+      with:
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
       run: make ci-tests-build
     - name: Run tests for service search
       run: make ci-run-tests s=tests_search
