@@ -1,18 +1,25 @@
-PROJECT_NAME=movies1
+PROJECT_NAME=movies
 
 ENV_DEV=dev
 ENV_TEST=test
 ENV_PROD=prod
 
-COMMAND_PREFIX_DEV=dev
-COMMAND_PREFIX_PROD=prod
-COMMAND_PREFIX_TEST=test
-COMMAND_PREFIX_CHECK=check
-COMMAND_PREFIX_STOP=stop
-COMMAND_PREFIX_DOWN=down
+TARGET_PREFIX_DEV=dev
+TARGET_PREFIX_PROD=prod
+TARGET_PREFIX_TEST=test
+TARGET_PREFIX_CHECK=check
+TARGET_PREFIX_STOP=stop
+TARGET_PREFIX_DOWN=down
 
-PATH_TO_ENV_FILE_DEV=.envs/development/.env1
-PATH_TO_ENV_FILE_PROD=.envs/production/.env1
+RUN_DEV=$(TARGET_PREFIX_DEV)
+RUN_DEV_CHECK=$(TARGET_PREFIX_DEV)-$(TARGET_PREFIX_CHECK)
+RUN_DEV_STOP=$(TARGET_PREFIX_DEV)-$(TARGET_PREFIX_STOP)
+RUN_DEV_DOWN=$(TARGET_PREFIX_DEV)-$(TARGET_PREFIX_DOWN)
+
+RUN_TEST=$(TARGET_PREFIX_TEST)
+RUN_TEST_CHECK=$(TARGET_PREFIX_TEST)-$(TARGET_PREFIX_CHECK)
+RUN_TEST_STOP=$(TARGET_PREFIX_TEST)-$(TARGET_PREFIX_STOP)
+RUN_TEST_DOWN=$(TARGET_PREFIX_TEST)-$(TARGET_PREFIX_DOWN)
 
 DOCKER_COMPOSE_MAIN_FILE=docker-compose.yml
 DOCKER_COMPOSE_DEV_FILE=docker-compose.dev.yml
@@ -60,7 +67,7 @@ endif
 
 
 define run_docker_compose
-	COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME)-$(1) docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(2) $(3) $(4)
+	@echo COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME)-$(1) docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(2) $(3) $(4)
 endef
 
 
@@ -95,28 +102,22 @@ pg-to-es:
 #############
 # DEV
 #############
-$(COMMAND_PREFIX_DEV):
-	$(call log,Down containers (TEST))
-	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),down)
-
-	$(call log,Down containers (DEV))
-	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),down)
-
+$(RUN_DEV): $(RUN_DEV_DOWN) $(RUN_TEST_DOWN)
 	$(call log,Run containers (DEV))
 	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
 
 
-$(COMMAND_PREFIX_DEV)-$(COMMAND_PREFIX_CHECK):
+$(RUN_DEV_CHECK):
 	$(call log,Check configuration (DEV))
 	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),config)
 
 
-$(COMMAND_PREFIX_DEV)-$(COMMAND_PREFIX_STOP):
+$(RUN_DEV_STOP):
 	$(call log,Stop running containers (DEV))
 	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),stop,$(s))
 
 
-$(COMMAND_PREFIX_DEV)-$(COMMAND_PREFIX_DOWN):
+$(RUN_DEV_DOWN):
 	$(call log,Down running containers (DEV))
 	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),down)
 
@@ -124,28 +125,22 @@ $(COMMAND_PREFIX_DEV)-$(COMMAND_PREFIX_DOWN):
 #############
 # TEST
 #############
-$(COMMAND_PREFIX_TEST):
-	$(call log,Down containers (DEV))
-	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_TEST_FILE),down)
-
-	$(call log,Down containers (TEST))
-	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),down)
-
+$(RUN_TEST): $(RUN_TEST_DOWN) $(RUN_DEV_DOWN)
 	$(call log,Run containers (TEST))
 	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
 
 
-$(COMMAND_PREFIX_TEST)-$(COMMAND_PREFIX_CHECK):
+$(RUN_TEST_CHECK):
 	$(call log,Check configuration (TEST))
 	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),config)
 
 
-$(COMMAND_PREFIX_TEST)-$(COMMAND_PREFIX_STOP):
+$(RUN_TEST_STOP):
 	$(call log,Stop running containers (TEST))
 	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),stop,$(s))
 
 
-$(COMMAND_PREFIX_TEST)-$(COMMAND_PREFIX_DOWN):
+$(RUN_TEST_DOWN):
 	$(call log,Down running containers (TEST))
 	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),down)
 
@@ -156,4 +151,4 @@ $(COMMAND_PREFIX_TEST)-$(COMMAND_PREFIX_DOWN):
 gha-make-env-file-dev:
 	$(call create_file,.env-tmp)
 	$(call write_to_file,.env-tmp,${{ secrets.ENVS-DEV }})
-	sed '/=\</!d;s/=/=/' .env-tmp > .envs/development/.env
+	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/development/.env
