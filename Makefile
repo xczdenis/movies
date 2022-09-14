@@ -198,6 +198,7 @@ gha-make-env-file-dev:
 gha-make-env-file-prod:
 	$(call create_file,.env-tmp)
 	$(call write_to_file,.env-tmp,$(ENVS_PROD))
+	$(call write_to_file,.env-tmp,TEST=TEST)
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/production/.env
 
 
