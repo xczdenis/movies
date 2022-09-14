@@ -11,6 +11,9 @@ COMMAND_PREFIX_CHECK=check
 COMMAND_PREFIX_STOP=stop
 COMMAND_PREFIX_DOWN=down
 
+PATH_TO_ENV_FILE_DEV=.envs/development/.env1
+PATH_TO_ENV_FILE_PROD=.envs/production/.env1
+
 DOCKER_COMPOSE_MAIN_FILE=docker-compose.yml
 DOCKER_COMPOSE_DEV_FILE=docker-compose.dev.yml
 DOCKER_COMPOSE_PROD_FILE=docker-compose.prod.yml
@@ -67,6 +70,26 @@ define log
 	@echo "${BLUE}$(1)${RESET}"
 	@echo "${WHITE}----------------------------------------${RESET}"
 endef
+
+
+define create_file
+	@touch $(1)
+endef
+
+
+define write_to_file
+	@echo $(2) >> $(1)
+endef
+
+
+#############
+# ETL
+#############
+sqlite-to-pg:
+	python etl/src/sqlite_to_pg.py
+
+pg-to-es:
+	python etl/src/pg_to_es.py
 
 
 #############
@@ -127,8 +150,10 @@ $(COMMAND_PREFIX_TEST)-$(COMMAND_PREFIX_DOWN):
 	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),down)
 
 
-sqlite-to-pg:
-	python etl/src/sqlite_to_pg.py
-
-pg-to-es:
-	python etl/src/pg_to_es.py
+#############
+# CI/CD
+#############
+gha-make-env-file-dev:
+	$(call create_file,.env-tmp)
+	$(call write_to_file,.env-tmp,${{ secrets.ENVS-DEV }})
+	sed '/=\</!d;s/=/=/' .env-tmp > .envs/development/.env
