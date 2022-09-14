@@ -89,6 +89,12 @@ define write_to_file
 endef
 
 
+down: $(RUN_DEV_DOWN) $(RUN_TEST_DOWN)
+	$(call log,Down containers $(COMPOSE_PROJECT_NAME))
+	docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(DOCKER_COMPOSE_DEV_FILE) down
+	docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(DOCKER_COMPOSE_TEST_FILE) down
+
+
 #############
 # ETL
 #############
@@ -102,7 +108,7 @@ pg-to-es:
 #############
 # DEV
 #############
-$(RUN_DEV): $(RUN_DEV_DOWN) $(RUN_TEST_DOWN)
+$(RUN_DEV): down
 	$(call log,Run containers (DEV))
 	$(call run_docker_compose,$(ENV_DEV),$(DOCKER_COMPOSE_DEV_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
 
@@ -125,9 +131,17 @@ $(RUN_DEV_DOWN):
 #############
 # TEST
 #############
-$(RUN_TEST): $(RUN_TEST_DOWN) $(RUN_DEV_DOWN)
+$(RUN_TEST): down
 	$(call log,Run containers (TEST))
 	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),$(COMPOSE_OPTION_START_AS_DEMON),$(s))
+
+
+$(RUN_TEST)-it: $(RUN_TEST_DOWN) $(RUN_DEV_DOWN)
+	$(call log,Build test containers)
+	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),build)
+
+	$(call log,Run tests for service search)
+	$(call run_docker_compose,$(ENV_TEST),$(DOCKER_COMPOSE_TEST_FILE),run,tests_search)
 
 
 $(RUN_TEST_CHECK):
