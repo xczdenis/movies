@@ -206,4 +206,4 @@ ci-tests-build:
 
 
 ci-run-tests:
-	@$(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),run,$(s))
+	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),run,$(s))

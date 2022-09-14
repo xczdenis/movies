@@ -11,7 +11,8 @@ jobs:
         COMPOSE_PROJECT_NAME: movies
         ENVIRONMENT: production
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Create env file
       run: make gha-make-env-file-prod
     - name: Build docker-compose images for tests
