@@ -152,3 +152,11 @@ gha-make-env-file-dev:
 	$(call create_file,.env-tmp)
 	$(call write_to_file,.env-tmp,${{ secrets.ENVS-DEV }})
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/development/.env
+
+
+ci-test-build:
+	$(call run_docker_compose,'test',$(DOCKER_COMPOSE_TEST_FILE),build)
+
+
+ci-run-test-search:
+	$(call run_docker_compose,'test',$(DOCKER_COMPOSE_TEST_FILE),run tests_search)
