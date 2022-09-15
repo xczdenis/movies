@@ -6,7 +6,7 @@ from helpers import create_es_indexes
 from loguru import logger
 from processes.processes import PGToESProcess
 
-es_client = ESClient("{host}:{port}".format(host=config.ELASTIC_HOST, port=config.ELASTIC_PORT))
+es_client = ESClient('{host}:{port}'.format(host=config.ELASTIC_HOST, port=config.ELASTIC_PORT))
 pg_client = PGClient(
     "postgres://{user}:{pwd}@{host}:{port}/{db_name}".format(
         user=config.POSTGRES_USER,
