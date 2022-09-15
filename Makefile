@@ -204,7 +204,7 @@ gha-make-env-file-prod2:
 
 gha-make-env-file-prod:
 	$(call create_file,.envs/production/.env)
-	$(call write_to_file,.env-tmp,$(ENVS_PROD))
+	$(call write_to_file,.envs/production/.env,$(ENVS_PROD))
 
 ci-show-envs-prod:
 	cat .envs/production/.env
