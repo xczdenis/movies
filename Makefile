@@ -190,8 +190,8 @@ $(RUN_TEST_DOWN):
 # CI/CD
 #############
 ci-tests-build:
-	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),build)
+	@DOCKER_BUILDKIT=1 ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),build)
 
 
 ci-run-tests:
-	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),run,$(s))
+	@DOCKER_BUILDKIT=1 ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),run,$(s))
