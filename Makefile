@@ -195,13 +195,16 @@ gha-make-env-file-dev:
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/development/.env
 
 
-gha-make-env-file-prod:
+gha-make-env-file-prod2:
 	$(call create_file,.env-tmp)
 	$(call write_to_file,.env-tmp,$(ENVS_PROD))
 	$(call write_to_file,.env-tmp,TEST=TEST)
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/production/.env
-	cat .env-temp
 
+
+gha-make-env-file-prod2:
+	$(call create_file,.envs/production/.env)
+	$(call write_to_file,.env-tmp,$(ENVS_PROD))
 
 ci-show-envs-prod:
 	cat .envs/production/.env
