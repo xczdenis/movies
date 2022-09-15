@@ -9,7 +9,8 @@ from processes.processes import PGToESProcess
 es_client = ESClient("{host}:{port}".format(host=config.ELASTIC_HOST, port=config.ELASTIC_PORT))
 pg_client = PGClient(
     "postgres://{user}:{pwd}@{host}:{port}/{db_name}".format(
-        user=config.POSTGRES_USER, pwd=config.POSTGRES_PASSWORD,
+        user=config.POSTGRES_USER,
+        pwd=config.POSTGRES_PASSWORD,
         host=config.POSTGRES_HOST,
         port=config.POSTGRES_PORT,
         db_name=config.POSTGRES_DB,
