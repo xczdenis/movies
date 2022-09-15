@@ -37,12 +37,14 @@ services:
         build:
             context: .
             dockerfile: ./adminpanel/docker/postgres/Dockerfile
+        restart: on-failure
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env
     es:
         build:
             context: .
             dockerfile: ./search/docker/es/Dockerfile
+        restart: on-failure
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env
         environment:
@@ -51,5 +53,6 @@ services:
         build:
             context: .
             dockerfile: ./search/docker/redis/Dockerfile
+        restart: on-failure
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env
