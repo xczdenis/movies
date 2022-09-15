@@ -10,25 +10,11 @@ jobs:
     env:
         COMPOSE_PROJECT_NAME: movies
         ENVIRONMENT: production
-        ENVS_PROD: ${{ secrets.ENVS_PROD }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-#    - name: Create env file
-#      run: make gha-make-env-file-prod
-#    - name: Create env file
-#      uses: "DamianReeves/write-file-action@master"
-#      with:
-#          path: .envs/production/.env
-#          write-mode: overwrite
-#          contents: |
-#            ${{ secrets.ENVS_PROD }}
-
-    - run: printf "${{ secrets.ENVS_PROD }}" >> .envs/production/.env
-#    - run: printf $ENVS_PRODz
-    - name: Show env file
-      run: make ci-show-envs-prod
-    - run: cat .envs/production/.env
+    - name: Create env file
+      run: @printf "${{ secrets.ENVS_PROD }}" >> .envs/production/.env
     - name: Show config
       run: make ci-tests-config
 #    - name: Build docker-compose images for tests
