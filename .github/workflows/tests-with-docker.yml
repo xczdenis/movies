@@ -5,7 +5,7 @@ on:
 
 jobs:
     test:
-        name: Run tests with docker
+        name: Tests with docker
         runs-on: ubuntu-latest
         env:
             COMPOSE_PROJECT_NAME: movies
