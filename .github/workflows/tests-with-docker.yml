@@ -29,9 +29,8 @@ jobs:
             -   name: Build production image
                 uses: docker/build-push-action@v3
                 with:
-                    context: .
-                    builder: ${{ steps.buildx.outputs.name }}
-                    file: .dockerdev/Dockerfile.multi
+#                    context: .
+#                    builder: ${{ steps.buildx.outputs.name }}
                     push: false
                     tags: ${{ steps.prep.outputs.tagged_image }}
                     cache-from: type=local,src=/tmp/.buildx-cache
