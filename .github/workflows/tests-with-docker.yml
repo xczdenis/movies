@@ -19,29 +19,9 @@ jobs:
                 uses: docker/setup-buildx-action@v2
                 with:
                     install: true
-            -   name: Cache Docker layers
-                uses: actions/cache@v3
-                with:
-                    path: /tmp/.buildx-cache
-                    key: ${{ runner.os }}-multi-buildx-${{ github.sha }}
-                    restore-keys: |
-                        ${{ runner.os }}-multi-buildx
-            -   name: Build production image
-                uses: docker/build-push-action@v3
-                with:
-#                    context: .
-#                    builder: ${{ steps.buildx.outputs.name }}
-                    push: false
-                    tags: ${{ steps.prep.outputs.tagged_image }}
-                    cache-from: type=local,src=/tmp/.buildx-cache
-                    cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
             -   name: Create env file
                 run: printf "${{ secrets.ENVS_PROD }}" >> .envs/production/.env
             -   name: Build docker-compose images
                 run: make ci-tests-build
             -   name: Run tests for service search
                 run: make ci-run-tests s=tests_search
-            -   name: Move cache
-                run: |
-                    rm -rf /tmp/.buildx-cache
-                    mv /tmp/.buildx-cache-new /tmp/.buildx-cache
