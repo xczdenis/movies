@@ -18,11 +18,11 @@ jobs:
       run: make gha-make-env-file-prod
     - name: Show env file
       run: make ci-show-envs-prod
-    - name: Show config
-      run: make ci-tests-config
     - run: printf $ENVS_PROD >> .envs/production/.env
     - run: printf $ENVS_PROD
     - run: cat .envs/production/.env
+    - name: Show config
+      run: make ci-tests-config
 #    - name: Build docker-compose images for tests
 #      run: make ci-tests-build
 #    - name: Run tests for service search
