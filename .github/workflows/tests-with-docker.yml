@@ -10,7 +10,6 @@ jobs:
     env:
         COMPOSE_PROJECT_NAME: movies
         ENVIRONMENT: production
-        DOCKER_BUILDKIT: 1
     steps:
     - name: Checkout
       uses: actions/checkout@v3
