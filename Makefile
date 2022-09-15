@@ -196,7 +196,7 @@ gha-make-env-file-dev:
 
 
 gha-make-env-file-prod:
-	printf "$ENVS_PROD" >> .envs/production/.env
+	printf $(ENVS_PROD) >> .envs/production/.env
 
 ci-show-envs-prod:
 	cat .envs/production/.env
