@@ -24,7 +24,7 @@ jobs:
 #          contents: |
 #            ${{ secrets.ENVS_PROD }}
 
-    - run: printf "$ENVS_PROD" >> .envs/production/.env
+    - run: printf "${{ secrets.ENVS_PROD }}" >> .envs/production/.env
 #    - run: printf $ENVS_PRODz
     - name: Show env file
       run: make ci-show-envs-prod
