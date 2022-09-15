@@ -202,7 +202,7 @@ gha-make-env-file-prod2:
 	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/production/.env
 
 
-gha-make-env-file-prod2:
+gha-make-env-file-prod:
 	$(call create_file,.envs/production/.env)
 	$(call write_to_file,.env-tmp,$(ENVS_PROD))
 
