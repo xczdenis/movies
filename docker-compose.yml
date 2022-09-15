@@ -11,6 +11,7 @@ services:
             - COMPOSE_MODE=on
             - POSTGRES_HOST=postgres
             - POSTGRES_PORT=5432
+            - CREATE_SUPER_USER=True
         depends_on:
             - postgres
     search:
