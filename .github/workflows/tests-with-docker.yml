@@ -8,7 +8,6 @@ jobs:
     name: Run tests with docker
     runs-on: ubuntu-latest
     env:
-        ENVS_PROD: ${{ secrets.ENVS_PROD }}
         COMPOSE_PROJECT_NAME: movies
         ENVIRONMENT: production
     steps:
@@ -16,17 +15,18 @@ jobs:
       uses: actions/checkout@v3
 #    - name: Create env file
 #      run: make gha-make-env-file-prod
-    - name: Create env file
-      uses: "DamianReeves/write-file-action@master"
-      with:
-          path: .envs/production/.env
-          write-mode: overwrite
-          contents: |
-            ${{ secrets.ENVS_PROD }}
+#    - name: Create env file
+#      uses: "DamianReeves/write-file-action@master"
+#      with:
+#          path: .envs/production/.env
+#          write-mode: overwrite
+#          contents: |
+#            ${{ secrets.ENVS_PROD }}
+
+    - run: printf "$ENVS_PROD" >> .envs/production/.env
+#    - run: printf $ENVS_PROD
     - name: Show env file
       run: make ci-show-envs-prod
-#    - run: printf "$ENVS_PROD" >> .envs/production/.env
-#    - run: printf $ENVS_PROD
     - run: cat .envs/production/.env
     - name: Show config
       run: make ci-tests-config
