@@ -19,7 +19,7 @@ async def test_film_detail(app, fake_db, make_get_request):
     response = await make_get_request(url)
 
     assert response.status == HTTPStatus.OK
-    assert response.body["title"] == film.title
+    assert response.body["title"] == "2"
     assert response.body["rating"] == film.rating
     assert response.body["description"] == film.description
     assert len(response.body["actors"]) == len(film.actors)
