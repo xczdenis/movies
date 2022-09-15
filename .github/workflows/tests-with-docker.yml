@@ -18,7 +18,7 @@ jobs:
       run: make gha-make-env-file-prod
     - name: Show env file
       run: make ci-show-envs-prod
-    - run: printf $ENVS_PROD >> .envs/production/.env
+    - run: printf "$ENVS_PROD" >> .envs/production/.env
     - run: printf $ENVS_PROD
     - run: cat .envs/production/.env
     - name: Show config
