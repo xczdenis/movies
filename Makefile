@@ -189,22 +189,6 @@ $(RUN_TEST_DOWN):
 #############
 # CI/CD
 #############
-gha-make-env-file-dev:
-	$(call create_file,.env-tmp)
-	$(call write_to_file,.env-tmp,${{ secrets.ENVS_DEV }})
-	@sed '/=\</!d;s/=/=/' .env-tmp > .envs/development/.env
-
-
-gha-make-env-file-prod:
-	printf $(ENVS_PROD) >> .envs/production/.env
-
-ci-show-envs-prod:
-	cat .envs/production/.env
-
-ci-tests-config:
-	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),config)
-
-
 ci-tests-build:
 	@ENVIRONMENT=production $(call run_docker_compose,test,$(DOCKER_COMPOSE_TEST_FILE),build)
 
