@@ -24,11 +24,6 @@ jobs:
                 run: poetry install --only lint
             -   name: Lint by flake8
                 run: poetry run flake8
-            -   name: Lint by black
-                uses: psf/black@stable
-                with:
-                    options: "--check"
-                    src: "."
     lint-black:
         name: Lint by black
         runs-on: ubuntu-latest
