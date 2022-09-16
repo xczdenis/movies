@@ -2,13 +2,9 @@ services:
     adminpanel:
         environment:
             - ENVIRONMENT=production
-        ports:
-            - ${ADMINPANEL_APP_PORT}:8000
     search:
         environment:
             - ENVIRONMENT=production
-        ports:
-            - ${SEARCH_APP_PORT}:8000
     postgres:
         volumes:
             - pgdata_prod:/var/lib/postgresql/data
