@@ -10,9 +10,8 @@ from config.settings.components import config
 
 DEBUG = False
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS_PROD", "").split(" ")
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", "").split(" ")
 
-STATIC_ROOT = "/static/"
 
 # Security
 # https://docs.djangoproject.com/en/3.2/topics/security/
@@ -24,5 +23,5 @@ SECURE_HSTS_PRELOAD = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = False
 
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = True
