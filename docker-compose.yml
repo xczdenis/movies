@@ -12,8 +12,23 @@ services:
             - POSTGRES_HOST=postgres
             - POSTGRES_PORT=5432
             - CREATE_SUPER_USER=True
+        volumes:
+            - adminpanel-static:/app/staticfiles
         depends_on:
             - postgres
+    adminpanel_nginx:
+        build:
+            context: .
+            dockerfile: ./adminpanel/docker/nginx/Dockerfile
+        restart: on-failure
+        volumes:
+            - ./adminpanel/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./adminpanel/src/nginx/site.conf:/etc/nginx/conf.d/site.conf:ro
+            - adminpanel-static:/static
+        ports:
+            - "80:80"
+        depends_on:
+            - adminpanel
     search:
         build:
             context: .
@@ -57,3 +72,5 @@ services:
         restart: on-failure
         env_file:
             - ./.envs/${ENVIRONMENT:-production}/.env
+volumes:
+    adminpanel-static:
