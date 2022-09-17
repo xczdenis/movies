@@ -172,8 +172,6 @@ class ElasticDB(IAsyncDB):
         if index:
             request_body = await make_request_body_from_kwargs(**kwargs)
             resp = await self.execute_query(index=index, query="count", body=request_body)
-            logger.debug(f"TEST = {resp}")
-
         if resp:
             count = resp.get("count", 0)
 
