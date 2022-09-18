@@ -72,7 +72,7 @@ async def films_list(
     )
 
 
-@router.get("/{film_id}", name=get_rout_name(NAMESPACE, "detail"), response_model=Film)
+@router.get("/{film_id}/", name=get_rout_name(NAMESPACE, "detail"), response_model=Film)
 async def film_detail(
     film_id: str = Path(description="The ID of the film to get"),
     service: FilmService = Depends(get_film_service),

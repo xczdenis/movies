@@ -47,7 +47,7 @@ async def persons_list(
     )
 
 
-@router.get("/{person_id}", name=get_rout_name(NAMESPACE, "detail"), response_model=Person)
+@router.get("/{person_id}/", name=get_rout_name(NAMESPACE, "detail"), response_model=Person)
 async def person_detail(
     person_id: str = Path(description="The ID of the person to get"),
     service: PersonService = Depends(get_person_service),
@@ -61,7 +61,9 @@ async def person_detail(
     return Person(**person.dict())
 
 
-@router.get("/{person_id}/films", name=get_rout_name(NAMESPACE, "films_by_person"), response_model=Page[Film])
+@router.get(
+    "/{person_id}/films/", name=get_rout_name(NAMESPACE, "films_by_person"), response_model=Page[Film]
+)
 async def films_by_person(
     person_id: str = Path(description="The ID of the person whose films you want to get"),
     pagination: PaginateModel = Depends(),
