@@ -7,21 +7,25 @@ PREFIX_PROD=prod
 PREFIX_CHECK=check
 PREFIX_STOP=stop
 PREFIX_DOWN=down
+PREFIX_LOGS=logs
 
 RUN_PROD=$(PREFIX_PROD)
 RUN_PROD_CHECK=$(PREFIX_PROD)-$(PREFIX_CHECK)
 RUN_PROD_STOP=$(PREFIX_PROD)-$(PREFIX_STOP)
 RUN_PROD_DOWN=$(PREFIX_PROD)-$(PREFIX_DOWN)
+RUN_PROD_LOGS=$(PREFIX_PROD)-$(PREFIX_LOGS)
 
 RUN_DEV=$(PREFIX_DEV)
 RUN_DEV_CHECK=$(PREFIX_DEV)-$(PREFIX_CHECK)
 RUN_DEV_STOP=$(PREFIX_DEV)-$(PREFIX_STOP)
 RUN_DEV_DOWN=$(PREFIX_DEV)-$(PREFIX_DOWN)
+RUN_DEV_LOGS=$(PREFIX_DEV)-$(PREFIX_LOGS)
 
 RUN_TEST=$(PREFIX_TEST)
 RUN_TEST_CHECK=$(PREFIX_TEST)-$(PREFIX_CHECK)
 RUN_TEST_STOP=$(PREFIX_TEST)-$(PREFIX_STOP)
 RUN_TEST_DOWN=$(PREFIX_TEST)-$(PREFIX_DOWN)
+RUN_TEST_LOGS=$(PREFIX_TEST)-$(PREFIX_LOGS)
 
 DOCKER_COMPOSE_MAIN_FILE=docker-compose.yml
 DOCKER_COMPOSE_DEV_FILE=docker-compose.dev.yml
@@ -75,6 +79,11 @@ endif
 
 define run_docker_compose
 	DOCKER_BUILDKIT=$(DOCKER_BUILDKIT) COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME)-$(1) docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(2) $(3) $(4)
+endef
+
+
+define run_docker_compose_pure
+	docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) $(1)
 endef
 
 
@@ -136,6 +145,10 @@ $(RUN_PROD_DOWN):
 	ENVIRONMENT=production $(call run_docker_compose,$(PREFIX_PROD),$(DOCKER_COMPOSE_PROD_FILE),down)
 
 
+$(RUN_PROD_LOGS):
+	ENVIRONMENT=production $(call run_docker_compose,$(PREFIX_PROD),$(DOCKER_COMPOSE_PROD_FILE),logs,$(s))
+
+
 #############
 # DEV
 #############
@@ -157,6 +170,10 @@ $(RUN_DEV_STOP):
 $(RUN_DEV_DOWN):
 	$(call log,Down running containers (DEV))
 	$(call run_docker_compose,$(PREFIX_DEV),$(DOCKER_COMPOSE_DEV_FILE),down)
+
+
+$(RUN_DEV_LOGS):
+	$(call run_docker_compose,$(PREFIX_DEV),$(DOCKER_COMPOSE_DEV_FILE),logs,$(s))
 
 
 #############
@@ -189,6 +206,9 @@ $(RUN_TEST_DOWN):
 	$(call log,Down running containers (TEST))
 	$(call run_docker_compose,$(PREFIX_TEST),$(DOCKER_COMPOSE_TEST_FILE),down)
 
+
+$(RUN_TEST_LOGS):
+	$(call run_docker_compose,$(PREFIX_TEST),$(DOCKER_COMPOSE_TEST_FILE),logs,$(s))
 
 #############
 # CI/CD

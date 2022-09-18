@@ -80,6 +80,12 @@ make dev
 make dev s=postgres
 ```
 
+#### Посмотреть логи сервиса
+Укажите ключ `s` с названием сервиса, чтобы посмотреть его логи:
+```bash
+make dev-logs s=postgres
+```
+
 #### Проверить конфигурацию docker-compose
 ```bash
 make dev-check
@@ -150,6 +156,10 @@ make pg-to-es
 Запустить тесты в режиме демона:
 ```bash
 make test
+```
+Посмотреть логи тестов для сервиса `search`:
+```bash
+make test-logs s=tests_search
 ```
 Запустить тесты интерактивно (логи будут в терминале):
 ```bash
