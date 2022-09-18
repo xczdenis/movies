@@ -1,15 +1,15 @@
 import os
 from pathlib import Path
 
-from pydantic import BaseSettings, Field
+from pydantic import BaseSettings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 
 class Settings(BaseSettings):
-    SEARCH_APP_HOST: str = Field(default="127.0.0.1")
-    SEARCH_APP_PORT: int = Field(default="8000")
+    SEARCH_APP_HOST: str
+    SEARCH_APP_PORT: int
     PROJECT_NAME: str
     REDIS_HOST: str
     REDIS_PORT: int
