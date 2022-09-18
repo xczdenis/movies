@@ -11,7 +11,7 @@ from config.settings.components.base import INSTALLED_APPS, MIDDLEWARE
 # Setting the development status:
 DEBUG = True
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", "").split(" ")
+ALLOWED_HOSTS = config.ALLOWED_HOSTS.split(" ")
 
 # Installed apps for development only:
 INSTALLED_APPS += [
@@ -30,7 +30,7 @@ INTERNAL_IPS = [
 
 def _custom_show_toolbar(request):
     """Only show the debug toolbar to users with the superuser flag."""
-    return DEBUG and request.META["REMOTE_ADDR"] in INTERNAL_IPS
+    return DEBUG and (request.META["REMOTE_ADDR"] in INTERNAL_IPS or request.user.is_superuser)
 
 
 DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": _custom_show_toolbar}

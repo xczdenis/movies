@@ -1,13 +1,27 @@
+import os
 from pathlib import Path
 
 from config import env_manager
-from decouple import AutoConfig
+from pydantic import BaseSettings
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent.parent
 
-path_to_env_file = ROOT_DIR / ".envs" / env_manager.get_env()
 
-# Loading `.env` files
-config = AutoConfig(search_path=path_to_env_file)
+class Settings(BaseSettings):
+    SECRET_KEY: str
+    ALLOWED_HOSTS: str
+    POSTGRES_DB: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: int
+
+    class Config:
+        env_file = os.path.join(ROOT_DIR, ".envs", env_manager.get_env(), ".env"), os.path.join(
+            ROOT_DIR, ".env"
+        )
+        env_file_encoding = "utf-8"
+
+
+config = Settings()
