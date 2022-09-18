@@ -269,14 +269,17 @@ cd adminpanel/src
 python manage.py migrate
 python manage.py runserver
 ```
+Можно запустить сервис из корневой директории:
+```bash
+python adminpanel/src/manage.py runserver
+```
 
 #### Запуск сервиса search
 Перед запуском сервиса `search`, убедитесь что у вас запущены redis и elasticsearch.
 
 Запустить сервис `search`:
 ```bash
-cd search/src
-python main.py
+python search/src/main.py
 ```
 
 #### Перенос данных из SQLite в Postgres
