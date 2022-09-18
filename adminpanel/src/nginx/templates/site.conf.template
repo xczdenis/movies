@@ -1,6 +1,6 @@
 server {
-    listen       80 default_server;
-    listen       [::]:80 default_server;
+    listen       ${ADMINPANEL_APP_LISTEN_PORT} default_server;
+    listen       [::]:${ADMINPANEL_APP_LISTEN_PORT} default_server;
     server_name  _;
 
     root /;
@@ -16,7 +16,7 @@ server {
     }
 
     location @backend {
-        proxy_pass http://adminpanel:8000;
+        proxy_pass http://${ADMINPANEL_APP_HOST}:${ADMINPANEL_APP_PORT};
     }
 
     location / {

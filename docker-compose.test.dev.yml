@@ -1,25 +1,42 @@
 services:
     adminpanel:
+        restart: "no"
         volumes:
             - ./adminpanel/src:/app
+    adminpanel_nginx:
+        restart: "no"
+        environment:
+            - ADMINPANEL_APP_LISTEN_PORT=${ADMINPANEL_APP_PORT}
         ports:
-            - ${ADMINPANEL_APP_PORT}:8000
+            - ${ADMINPANEL_APP_PORT}:${ADMINPANEL_APP_PORT}
     search:
+        restart: "no"
         volumes:
             - ./search/src:/app
+    search_nginx:
+        restart: "no"
+        environment:
+            - SEARCH_APP_LISTEN_PORT=${SEARCH_APP_PORT}
         ports:
-            - ${SEARCH_APP_PORT}:8000
+            - ${SEARCH_APP_PORT}:${SEARCH_APP_PORT}
     postgres:
+        restart: "no"
         volumes:
             - pgdata_test:/var/lib/postgresql/data
         ports:
             - ${POSTGRES_PORT}:5432
     es:
+        restart: "no"
         volumes:
             - esdata01_test:/usr/share/elasticsearch/data
         ports:
             - ${ELASTIC_PORT}:9200
+    redis:
+        restart: "no"
+        ports:
+            - ${REDIS_PORT}:6379
     tests_search:
+        restart: "no"
         volumes:
             - ./search/src:/app
 

@@ -2,9 +2,19 @@ services:
     adminpanel:
         environment:
             - ENVIRONMENT=production
+    adminpanel_nginx:
+        environment:
+            - ADMINPANEL_APP_LISTEN_PORT=${ADMINPANEL_APP_PORT}
+        ports:
+            - ${ADMINPANEL_APP_PORT}:${ADMINPANEL_APP_PORT}
     search:
         environment:
             - ENVIRONMENT=production
+    search_nginx:
+        environment:
+            - SEARCH_APP_LISTEN_PORT=${SEARCH_APP_PORT}
+        ports:
+            - ${SEARCH_APP_PORT}:${SEARCH_APP_PORT}
     postgres:
         volumes:
             - pgdata_prod:/var/lib/postgresql/data

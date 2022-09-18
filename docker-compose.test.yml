@@ -9,11 +9,8 @@ services:
             - ENVIRONMENT=${ENVIRONMENT:-production}
             - COMPOSE_MODE=on
             - SEARCH_APP_HOST=search
-            - SEARCH_APP_PORT=8000
             - REDIS_HOST=redis
-            - REDIS_PORT=6379
             - ELASTIC_HOST=es
-            - ELASTIC_PORT=9200
         depends_on:
             - es
             - redis

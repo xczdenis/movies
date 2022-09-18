@@ -10,7 +10,6 @@ services:
             - ENVIRONMENT=${ENVIRONMENT:-production}
             - COMPOSE_MODE=on
             - POSTGRES_HOST=postgres
-            - POSTGRES_PORT=5432
             - CREATE_SUPER_USER=True
         volumes:
             - adminpanel-static:/app/staticfiles
@@ -21,12 +20,14 @@ services:
             context: .
             dockerfile: ./adminpanel/docker/nginx/Dockerfile
         restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - ADMINPANEL_APP_HOST=adminpanel
         volumes:
             - ./adminpanel/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./adminpanel/src/nginx/site.conf:/etc/nginx/conf.d/site.conf:ro
+            - ./adminpanel/src/nginx/templates:/etc/nginx/templates:ro
             - adminpanel-static:/static
-        ports:
-            - "80:80"
         depends_on:
             - adminpanel
     search:
@@ -40,15 +41,25 @@ services:
         environment:
             - ENVIRONMENT=${ENVIRONMENT:-production}
             - COMPOSE_MODE=on
-            - SEARCH_APP_HOST=0.0.0.0
-            - SEARCH_APP_PORT=8000
             - REDIS_HOST=redis
-            - REDIS_PORT=6379
             - ELASTIC_HOST=es
-            - ELASTIC_PORT=9200
         depends_on:
             - es
             - redis
+    search_nginx:
+        build:
+            context: .
+            dockerfile: ./search/docker/nginx/Dockerfile
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - SEARCH_APP_HOST=search
+        volumes:
+            - ./search/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./search/src/nginx/templates:/etc/nginx/templates:ro
+        depends_on:
+            - search
     postgres:
         build:
             context: .
