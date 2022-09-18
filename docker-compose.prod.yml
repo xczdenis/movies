@@ -21,7 +21,11 @@ services:
     es:
         volumes:
             - esdata01_prod:/usr/share/elasticsearch/data
+    redis:
+        volumes:
+            - redis_prod:/data
 
 volumes:
     pgdata_prod:
     esdata01_prod:
+    redis_prod:
