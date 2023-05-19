@@ -1,0 +1,87 @@
+services:
+    adminpanel:
+        build:
+            context: ..
+            dockerfile: ../adminpanel/docker/app/Dockerfile
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - ENVIRONMENT=${ENVIRONMENT:-production}
+            - COMPOSE_MODE=on
+            - POSTGRES_HOST=postgres
+            - CREATE_SUPER_USER=True
+        volumes:
+            - adminpanel-static:/app/staticfiles
+        depends_on:
+            - postgres
+    adminpanel_nginx:
+        build:
+            context: ..
+            dockerfile: ../adminpanel/docker/nginx/Dockerfile
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - ADMINPANEL_APP_HOST=adminpanel
+        volumes:
+            - ./adminpanel/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./adminpanel/src/nginx/templates:/etc/nginx/templates:ro
+            - adminpanel-static:/static
+        depends_on:
+            - adminpanel
+    search:
+        build:
+            context: ..
+            dockerfile: ../search/docker/app/Dockerfile
+        image: app-search-img
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - ENVIRONMENT=${ENVIRONMENT:-production}
+            - COMPOSE_MODE=on
+            - REDIS_HOST=redis
+            - ELASTIC_HOST=es
+        depends_on:
+            - es
+            - redis
+    search_nginx:
+        build:
+            context: ..
+            dockerfile: ../search/docker/nginx/Dockerfile
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - CONTENT_APP_HOST=search
+        volumes:
+            - ./search/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./search/src/nginx/templates:/etc/nginx/templates:ro
+        depends_on:
+            - search
+    postgres:
+        build:
+            context: ..
+            dockerfile: ../adminpanel/docker/postgres/Dockerfile
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+    es:
+        build:
+            context: ..
+            dockerfile: ../search/docker/es/Dockerfile
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+        environment:
+            - discovery.type=single-node
+    redis:
+        build:
+            context: ..
+            dockerfile: ../search/docker/redis/Dockerfile
+        restart: on-failure
+        env_file:
+            - ./.envs/${ENVIRONMENT:-production}/.env
+volumes:
+    adminpanel-static:

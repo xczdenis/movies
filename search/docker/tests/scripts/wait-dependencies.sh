@@ -14,8 +14,8 @@ echo "\033[01;32mElasticsearch is up!\033[00m"
 echo ""
 
 # Search-APP
-echo "\033[94mWaiting the service: \033[97mSearch-APP (url=$SEARCH_APP_HOST:$SEARCH_APP_PORT)\033[00m"
-/wait-for-it.sh $SEARCH_APP_HOST:$SEARCH_APP_PORT -t 120 --
+echo "\033[94mWaiting the service: \033[97mSearch-APP (url=$CONTENT_APP_HOST:$CONTENT_APP_PORT)\033[00m"
+/wait-for-it.sh $CONTENT_APP_HOST:$CONTENT_APP_PORT -t 120 --
 echo "\033[01;32mSearch-APP is up!\033[00m"
 echo ""
 

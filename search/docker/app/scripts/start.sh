@@ -4,5 +4,5 @@ if [ "x$ENVIRONMENT" = 'xdevelopment' ]; then
     python main.py
 else
     echo "\033[94mRun in production mode mode\033[00m"
-    gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind $SEARCH_APP_HOST:$SEARCH_APP_PORT
+    gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind $CONTENT_APP_HOST:$CONTENT_APP_PORT
 fi

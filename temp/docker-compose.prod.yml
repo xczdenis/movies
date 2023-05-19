@@ -1,0 +1,31 @@
+services:
+    adminpanel:
+        environment:
+            - ENVIRONMENT=production
+    adminpanel_nginx:
+        environment:
+            - ADMINPANEL_APP_LISTEN_PORT=${ADMINPANEL_APP_PORT}
+        ports:
+            - ${ADMINPANEL_APP_PORT}:${ADMINPANEL_APP_PORT}
+    search:
+        environment:
+            - ENVIRONMENT=production
+    search_nginx:
+        environment:
+            - SEARCH_APP_LISTEN_PORT=${CONTENT_APP_PORT}
+        ports:
+            - ${CONTENT_APP_PORT}:${CONTENT_APP_PORT}
+    postgres:
+        volumes:
+            - pgdata_prod:/var/lib/postgresql/data
+    es:
+        volumes:
+            - esdata01_prod:/usr/share/elasticsearch/data
+    redis:
+        volumes:
+            - redis_prod:/data
+
+volumes:
+    pgdata_prod:
+    esdata01_prod:
+    redis_prod:

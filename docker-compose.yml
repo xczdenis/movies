@@ -1,87 +1,56 @@
+x-base-service: &base-service
+    platform: ${DOCKER_IMG_PLATFORM:-linux/amd64}
+    profiles:
+        - default
+
+x-profiles-adminpanel: &profiles-panel
+    profiles:
+        - default
+        - adminpanel
+        - etl
+
+x-profiles-etl: &profiles-etl
+    profiles:
+        - default
+        - etl
+
 services:
-    adminpanel:
-        build:
-            context: .
-            dockerfile: ./adminpanel/docker/app/Dockerfile
-        restart: on-failure
-        env_file:
-            - ./.envs/${ENVIRONMENT:-production}/.env
-        environment:
-            - ENVIRONMENT=${ENVIRONMENT:-production}
-            - COMPOSE_MODE=on
-            - POSTGRES_HOST=postgres
-            - CREATE_SUPER_USER=True
-        volumes:
-            - adminpanel-static:/app/staticfiles
-        depends_on:
-            - postgres
-    adminpanel_nginx:
-        build:
-            context: .
-            dockerfile: ./adminpanel/docker/nginx/Dockerfile
-        restart: on-failure
-        env_file:
-            - ./.envs/${ENVIRONMENT:-production}/.env
-        environment:
-            - ADMINPANEL_APP_HOST=adminpanel
-        volumes:
-            - ./adminpanel/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./adminpanel/src/nginx/templates:/etc/nginx/templates:ro
-            - adminpanel-static:/static
-        depends_on:
-            - adminpanel
-    search:
-        build:
-            context: .
-            dockerfile: ./search/docker/app/Dockerfile
-        image: app-search-img
-        restart: on-failure
-        env_file:
-            - ./.envs/${ENVIRONMENT:-production}/.env
-        environment:
-            - ENVIRONMENT=${ENVIRONMENT:-production}
-            - COMPOSE_MODE=on
-            - REDIS_HOST=redis
-            - ELASTIC_HOST=es
-        depends_on:
-            - es
-            - redis
-    search_nginx:
-        build:
-            context: .
-            dockerfile: ./search/docker/nginx/Dockerfile
-        restart: on-failure
-        env_file:
-            - ./.envs/${ENVIRONMENT:-production}/.env
-        environment:
-            - SEARCH_APP_HOST=search
-        volumes:
-            - ./search/src/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./search/src/nginx/templates:/etc/nginx/templates:ro
-        depends_on:
-            - search
     postgres:
+        <<: [ *profiles-panel, *base-service ]
         build:
             context: .
-            dockerfile: ./adminpanel/docker/postgres/Dockerfile
+            dockerfile: ./docker/postgres/Dockerfile
+            args:
+                - img=${POSTGRES_IMG}
+        env_file: .env
         restart: on-failure
-        env_file:
-            - ./.envs/${ENVIRONMENT:-production}/.env
-    es:
-        build:
-            context: .
-            dockerfile: ./search/docker/es/Dockerfile
-        restart: on-failure
-        env_file:
-            - ./.envs/${ENVIRONMENT:-production}/.env
         environment:
-            - discovery.type=single-node
-    redis:
+            POSTGRES_HOST: 127.0.0.1
+            POSTGRES_PORT: 5432
+
+    es:
+        <<: [ *profiles-etl, *base-service ]
         build:
             context: .
-            dockerfile: ./search/docker/redis/Dockerfile
+            dockerfile: ./docker/es/Dockerfile
+            args:
+                - img=${ELASTICSEARCH_IMG}
+        env_file: .env
         restart: on-failure
-        env_file:
-            - ./.envs/${ENVIRONMENT:-production}/.env
-volumes:
-    adminpanel-static:
+        environment:
+            discovery.type: single-node
+            ELASTIC_HOST: 127.0.0.1
+            ELASTIC_PORT: 9200
+
+    redis:
+        <<: [ *profiles-etl, *base-service ]
+        build:
+            context: .
+            dockerfile: ./docker/redis/Dockerfile
+            args:
+                - img=${REDIS_IMG}
+        env_file: .env
+        restart: on-failure
+        environment:
+            REDIS_HOST: 127.0.0.1
+            REDIS_PORT: 6379
