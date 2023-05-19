@@ -245,6 +245,20 @@ run-etl: down
 	$(call run_docker_compose_for_current_env, --profile etl ${COMPOSE_OPTION_START_AS_DEMON} ${s})
 
 
+# build and run docker containers in demon mode for adminpanel profile
+.PHONY: run-adminpanel
+run-adminpanel: down
+	$(call log, Run containers for adminpanel profile (${CURRENT_ENVIRONMENT_PREFIX}))
+	$(call run_docker_compose_for_current_env, --profile adminpanel ${COMPOSE_OPTION_START_AS_DEMON} ${s})
+
+
+# build and run docker containers in demon mode for content profile
+.PHONY: run-content
+run-content: down
+	$(call log, Run containers for content profile (${CURRENT_ENVIRONMENT_PREFIX}))
+	$(call run_docker_compose_for_current_env, --profile content ${COMPOSE_OPTION_START_AS_DEMON} ${s})
+
+
 # build and run tests in docker for api profile
 .PHONY: test
 test: down
@@ -335,7 +349,7 @@ su:
 
 .PHONY: adminpanel
 adminpanel:
-	python src/adminpanel/manage.py runserver
+	@python src/adminpanel/manage.py runserver ${ADMINPANEL_APP_HOST}:${ADMINPANEL_APP_PORT}
 
 
 .PHONY: sql-to-pg

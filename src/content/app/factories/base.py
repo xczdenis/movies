@@ -10,15 +10,15 @@ from content.utils import case_free_pop
 @dataclass(slots=True)
 class AppFactory:
     @classmethod
-    def make_app(cls, router: APIRouter | None = None, **kwargs) -> FastAPI:
+    def make_app(cls, config: dict | None = None, router: APIRouter | None = None, **kwargs) -> FastAPI:
         title = case_free_pop(kwargs, "title", settings.PROJECT_NAME)
-        debug = case_free_pop(kwargs, "debug", settings.DEBUG)
+        _config = {k.lower(): v for k, v in config.items()}
         app = FastAPI(
             title=title,
             docs_url="/openapi",
             openapi_url="/openapi.json",
             default_response_class=ORJSONResponse,
-            debug=debug,
+            **_config,
             **kwargs
         )
         if router:

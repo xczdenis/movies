@@ -118,3 +118,5 @@ REFERRER_POLICY = "same-origin"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOCALE_PATHS = ("movies/locale",)
+
+CSRF_TRUSTED_ORIGINS = [host.strip() for host in app_settings.CSRF_TRUSTED_ORIGINS.split(",")]

@@ -1,4 +1,32 @@
 services:
+    adminpanel_proxy:
+        restart: "no"
+        environment:
+            ADMINPANEL_APP_LISTEN_PORT: 8000
+        ports:
+            - ${ADMINPANEL_APP_PORT}:8000
+
+    adminpanel:
+        restart: "no"
+        environment:
+            ENVIRONMENT: development
+        volumes:
+            - ./src/${ADMINPANEL_PKG_NAME}:/${CONTAINER_WORK_DIR}/src/${ADMINPANEL_PKG_NAME}
+
+    content_proxy:
+        restart: "no"
+        environment:
+            CONTENT_APP_LISTEN_PORT: 8000
+        ports:
+            - ${CONTENT_APP_PORT}:8000
+
+    content:
+        restart: "no"
+        environment:
+            ENVIRONMENT: development
+        volumes:
+            - ./src/${CONTENT_PKG_NAME}:/${CONTAINER_WORK_DIR}/src/${CONTENT_PKG_NAME}
+
     postgres:
         restart: "no"
         volumes:
@@ -6,7 +34,7 @@ services:
         ports:
             - ${POSTGRES_PORT}:5432
 
-    es:
+    elasticsearch:
         restart: "no"
         volumes:
             - es_data:/usr/share/elasticsearch/data

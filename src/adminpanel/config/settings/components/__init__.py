@@ -15,9 +15,10 @@ class BaseSettingsConfigMixin(BaseSettings):
 
 
 class AppSettings(BaseSettingsConfigMixin):
+    ENVIRONMENT: str = "production"
     SECRET_KEY: str
     ALLOWED_HOSTS: str
-    ENVIRONMENT: str = "production"
+    CSRF_TRUSTED_ORIGINS: str
     SUPERUSER_LOGIN: str
     SUPERUSER_EMAIL: str
     SUPERUSER_PASSWORD: str

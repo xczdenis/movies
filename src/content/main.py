@@ -14,4 +14,9 @@ register_exception_handlers(app)
 if __name__ == "__main__":
     setup_logging(settings.LOG_LEVEL, settings.JSON_LOGS)
 
-    uvicorn.run("main:app", host=settings.CONTENT_APP_HOST, port=int(settings.CONTENT_APP_PORT))
+    uvicorn.run(
+        "main:app",
+        host=settings.CONTENT_APP_HOST,
+        port=int(settings.CONTENT_APP_PORT),
+        reload=settings.RELOAD,
+    )

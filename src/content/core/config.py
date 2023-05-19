@@ -9,6 +9,7 @@ ROOT_DIR = SRC_DIR.parent
 
 
 class Settings(BaseSettings):
+    ENVIRONMENT: str = "production"
     CONTENT_APP_HOST: str
     CONTENT_APP_PORT: int
     BASE_API_PREFIX: str = "api"
@@ -16,7 +17,8 @@ class Settings(BaseSettings):
     ELASTIC_USER: str
     ELASTIC_PASSWORD: str
     PROJECT_NAME: str
-    DEBUG: bool
+    DEBUG: bool = False
+    RELOAD: bool = False
     REDIS_HOST: str
     REDIS_PORT: int
     ELASTIC_HOST: str
@@ -33,6 +35,10 @@ class Settings(BaseSettings):
 
     @validator("DEBUG")
     def set_debug(cls, v, values):  # noqa
+        return v and values["ENVIRONMENT"] == "development"
+
+    @validator("RELOAD")
+    def set_reload(cls, v, values):  # noqa
         return v and values["ENVIRONMENT"] == "development"
 
 

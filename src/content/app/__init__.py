@@ -15,15 +15,14 @@ def mount_sub_app(main_app: FastAPI, api_version_prefix: str, sub_app: FastAPI):
     main_app.mount(f"/{settings.BASE_API_PREFIX}/{api_version_prefix}", sub_app)
 
 
-def create_app(config: dict) -> FastAPI:
+def create_app(config: dict | None = None) -> FastAPI:
     app_factory = factories.AppFactory()
 
     global_app_attributes = {"responses": {**global_responses}}
 
-    main_app = app_factory.make_app(**config, **global_app_attributes)
+    main_app = app_factory.make_app(config=config, **global_app_attributes)
 
-    app_v1 = app_factory.make_app(router=router_v1, **config, **global_app_attributes)
-    # add_pagination(app_v1)
+    app_v1 = app_factory.make_app(config=config, router=router_v1, **global_app_attributes)
 
     mount_sub_app(main_app, settings.API_V1_PREFIX, app_v1)
 

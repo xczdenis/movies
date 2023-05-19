@@ -1,6 +1,6 @@
 server {
-    listen       ${SEARCH_APP_LISTEN_PORT} default_server;
-    listen       [::]:${SEARCH_APP_LISTEN_PORT} default_server;
+    listen       ${CONTENT_APP_LISTEN_PORT} default_server;
+    listen       [::]:${CONTENT_APP_LISTEN_PORT} default_server;
     server_name  _;
 
     root /;
@@ -9,7 +9,7 @@ server {
     rewrite ^([^.\?]*[^/])$ $1/ permanent;
 
     location / {
-        proxy_pass http://${CONTENT_APP_HOST}:${CONTENT_APP_HOST}/;
+        proxy_pass http://${CONTENT_APP_HOST}:${CONTENT_APP_PORT}/;
     }
 
     error_page   404              /404.html;

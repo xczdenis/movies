@@ -1,56 +1,159 @@
 x-base-service: &base-service
     platform: ${DOCKER_IMG_PLATFORM:-linux/amd64}
+    restart: on-failure
     profiles:
         - default
 
-x-profiles-adminpanel: &profiles-panel
-    profiles:
-        - default
-        - adminpanel
-        - etl
-
-x-profiles-etl: &profiles-etl
-    profiles:
-        - default
-        - etl
+x-common-healthcheck: &common-healthcheck
+    interval: 5s
+    timeout: 5s
+    retries: 10
 
 services:
+    adminpanel_proxy:
+        <<: *base-service
+        build:
+            context: .
+            dockerfile: ./docker/${ADMINPANEL_PKG_NAME}/nginx/Dockerfile
+            args:
+                - img=${NGINX_IMG}
+        environment:
+            ADMINPANEL_APP_HOST: adminpanel
+            ADMINPANEL_APP_PORT: 8000
+        volumes:
+            - ./docker/${ADMINPANEL_PKG_NAME}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./docker/${ADMINPANEL_PKG_NAME}/nginx/templates:/etc/nginx/templates:ro
+            - adminpanel-static:/static
+        depends_on:
+            adminpanel:
+                condition: service_healthy
+        profiles:
+            - default
+            - adminpanel
+
+    adminpanel:
+        <<: *base-service
+        build:
+            context: .
+            dockerfile: ./docker/${ADMINPANEL_PKG_NAME}/Dockerfile
+            args:
+                - img=${PYTHON_IMG}
+                - work_dir=${CONTAINER_WORK_DIR}
+                - pck_name=${ADMINPANEL_PKG_NAME}
+        env_file: .env
+        restart: on-failure
+        environment:
+            ENVIRONMENT: ${ENVIRONMENT:-production}
+            ADMINPANEL_APP_HOST: 0.0.0.0
+            ADMINPANEL_APP_PORT: 8000
+            POSTGRES_HOST: postgres
+            POSTGRES_PORT: 5432
+        volumes:
+            - adminpanel-static:/${CONTAINER_WORK_DIR}/src/${ADMINPANEL_PKG_NAME}/staticfiles
+        healthcheck:
+            test: [ "CMD", "/scripts/wait-for-it.sh", "adminpanel:8000" ]
+            <<: *common-healthcheck
+        depends_on:
+            postgres:
+                condition: service_healthy
+        profiles:
+            - default
+            - adminpanel
+
+    content_proxy:
+        <<: *base-service
+        build:
+            context: .
+            dockerfile: ./docker/${CONTENT_PKG_NAME}/nginx/Dockerfile
+            args:
+                - img=${NGINX_IMG}
+        environment:
+            CONTENT_APP_HOST: content
+            CONTENT_APP_PORT: 8000
+        volumes:
+            - ./docker/${CONTENT_PKG_NAME}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./docker/${CONTENT_PKG_NAME}/nginx/templates:/etc/nginx/templates:ro
+        depends_on:
+            content:
+                condition: service_healthy
+        profiles:
+            - default
+            - content
+
+    content:
+        <<: *base-service
+        build:
+            context: .
+            dockerfile: ./docker/${CONTENT_PKG_NAME}/Dockerfile
+            args:
+                - img=${PYTHON_IMG}
+                - work_dir=${CONTAINER_WORK_DIR}
+                - pck_name=${CONTENT_PKG_NAME}
+        env_file: .env
+        environment:
+            ENVIRONMENT: ${ENVIRONMENT:-production}
+            CONTENT_APP_HOST: 0.0.0.0
+            CONTENT_APP_PORT: 8000
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+            ELASTIC_HOST: elasticsearch
+            ELASTIC_PORT: 9200
+        healthcheck:
+            test: [ "CMD", "/scripts/wait-for-it.sh", "content:8000" ]
+            <<: *common-healthcheck
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+            redis:
+                condition: service_started
+        profiles:
+            - default
+            - content
+
     postgres:
-        <<: [ *profiles-panel, *base-service ]
+        <<: *base-service
         build:
             context: .
             dockerfile: ./docker/postgres/Dockerfile
             args:
                 - img=${POSTGRES_IMG}
-        env_file: .env
-        restart: on-failure
-        environment:
-            POSTGRES_HOST: 127.0.0.1
-            POSTGRES_PORT: 5432
+        healthcheck:
+            test: [ "CMD", "/scripts/wait-for-it.sh", "postgres:5432" ]
+            <<: *common-healthcheck
+        profiles:
+            - default
+            - adminpanel
+            - etl
 
-    es:
-        <<: [ *profiles-etl, *base-service ]
+    elasticsearch:
+        <<: *base-service
         build:
             context: .
-            dockerfile: ./docker/es/Dockerfile
+            dockerfile: ./docker/elasticsearch/Dockerfile
             args:
                 - img=${ELASTICSEARCH_IMG}
         env_file: .env
-        restart: on-failure
         environment:
             discovery.type: single-node
-            ELASTIC_HOST: 127.0.0.1
-            ELASTIC_PORT: 9200
+        healthcheck:
+            test: [ "CMD", "/scripts/wait-for-it.sh", "elasticsearch:9200" ]
+            <<: *common-healthcheck
+        profiles:
+            - default
+            - content
+            - etl
 
     redis:
-        <<: [ *profiles-etl, *base-service ]
+        <<: *base-service
         build:
             context: .
             dockerfile: ./docker/redis/Dockerfile
             args:
                 - img=${REDIS_IMG}
-        env_file: .env
-        restart: on-failure
-        environment:
-            REDIS_HOST: 127.0.0.1
-            REDIS_PORT: 6379
+        profiles:
+            - default
+            - content
+            - etl
+
+volumes:
+    adminpanel-static:
