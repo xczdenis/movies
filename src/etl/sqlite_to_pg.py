@@ -1,6 +1,7 @@
 from etl.config.settings import pg_config, sqlite_config
 from psycopg2.extras import RealDictCursor
 from etl.db_clients.context_managers import DatabaseClientContextManager
+
 from etl.db_clients.pg import PGClient
 
 from etl.db_clients.sqlite import SQLiteClient
