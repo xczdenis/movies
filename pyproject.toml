@@ -57,6 +57,16 @@ celery = {extras = ["redis"], version = "^5.2.7"}
 [tool.black]
 line-length = 110
 
+[tool.isort]
+line_length = 110
+multi_line_output = 3
+default_section = "THIRDPARTY"
+skip = "venv/"
+skip_glob = "**/migrations/*.py"
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+
 [tool.pytest.ini_options]
 pythonpath = ["search/src", "app"]
 addopts = "-v -p no:warnings"
