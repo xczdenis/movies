@@ -32,7 +32,8 @@ async def generate_genres(items_number: int):
 
 
 def make_genre(genres):
-    return Genre(id=fake_id(), name=genres[random.randint(0, len(genres) - 1)])
+    genre_name = genres[random.randint(0, len(genres) - 1)]
+    return Genre(id=fake_id(), name=genre_name)
 
 
 async def generate_films(items_number: int):
