@@ -7,7 +7,7 @@ from etl.db_clients.sqlite import SQLiteClient
 from etl.processes import SQLiteToPostgres
 
 Sql_client: SQLiteClient = SQLiteClient.from_url("sqlite://{db}".format(db=sqlite_config.DATABASE_PATH))
-pg_Client: PGClient = PGClient.from_url(
+Pg_Client: PGClient = PGClient.from_url(
     "postgres://{user}:{pwd}@{host}:{port}/{database}".format(
         user=pg_config.POSTGRES_USER,
         pwd=pg_config.POSTGRES_PASSWORD,
@@ -21,7 +21,7 @@ pg_Client: PGClient = PGClient.from_url(
 
 def load_data():
     with DatabaseClientContextManager(db_client=Sql_client) as sqlite:
-        with DatabaseClientContextManager(db_client=pg_Client) as pg:
+        with DatabaseClientContextManager(db_client=Pg_Client) as pg:
             process = SQLiteToPostgres(sqlite_client=sqlite, pg_client=pg)
             process.run()
 
