@@ -12,27 +12,27 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.11"
+pydantic = "^1.10.2"
+python-dotenv = "^1.0.0"
+python-decouple = "^3.6"
 backoff = "^2.2.1"
+loguru = "^0.7.0"
+uvicorn = "^0.22.0"
 
 [tool.poetry.group.adminpanel.dependencies]
 Django = "^4.1"
-python-dotenv = "^1.0.0"
+djangorestframework = "^3.13.1"
 django-split-settings = "^1.1.0"
 django-debug-toolbar = "^4.0.0"
-gunicorn = "^20.1.0"
-djangorestframework = "^3.13.1"
-python-decouple = "^3.6"
-loguru = "^0.7.0"
 django-filter = "^23.2"
-elasticsearch = {version = "8.7.0", extras = ["async"]}
-orjson = "^3.8.0"
-uvicorn = "^0.22.0"
-pydantic = "^1.10.2"
 psycopg2-binary = "^2.9.6"
+gunicorn = "^20.1.0"
 
 [tool.poetry.group.content.dependencies]
 fastapi = "^0.95.1"
 redis = "^4.5.5"
+elasticsearch = {version = "8.7.0", extras = ["async"]}
+orjson = "^3.8.0"
 
 [tool.poetry.group.lint.dependencies]
 flake8 = "^6.0.0"

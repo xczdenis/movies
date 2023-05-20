@@ -39,7 +39,7 @@ RUN mkdir -p /${work_dir}/src/${pck_name} && touch /${work_dir}/src/${pck_name}/
     && mkdir -p /${work_dir}/src/etl && touch /${work_dir}/src/etl/__init__.py
 
 RUN poetry config virtualenvs.in-project true \
-    && poetry install
+    && poetry install --only main,adminpanel
 
 
 FROM base as final

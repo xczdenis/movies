@@ -15,8 +15,6 @@ DOCKER_COMPOSE_TEST_DEV_FILE=docker-compose.test.dev.yml
 COMPOSE_OPTION_START_AS_DEMON=up -d --build
 COMPOSE_PROFILE_DEFAULT=""--profile default""
 
-ESSENTIAL_SERVICES=python-src clickhouse-default-node
-
 # define standard colors
 ifneq (,$(findstring xterm,${TERM}))
 	BLACK        := $(shell printf "\033[30m")
@@ -224,13 +222,6 @@ _down-test:
 	$(call run_docker_compose_for_env, "_", "${DOCKER_COMPOSE_TEST_FILE}", "${COMPOSE_PROFILE_DEFAULT} down")
 
 
-# build only required images
-.PHONY: prebuild
-prebuild:
-	$(call log, Build essential images)
-	$(call run_docker_compose_for_current_env, build ${ESSENTIAL_SERVICES})
-
-
 # build and run docker containers in demon mode
 .PHONY: run
 run: down
@@ -264,10 +255,6 @@ run-content: down
 test: down
 	$(call log, Run tests in docker for api profile)
 	@if [ "${DOCKER_COMPOSE_TEST_FILE}" != "_" ]; then \
-		make run_docker_compose_for_env \
-			env=${PREFIX_TEST} \
-			override_file="-f ${DOCKER_COMPOSE_TEST_FILE}" \
-			cmd="build ${ESSENTIAL_SERVICES}"; \
 		make run_docker_compose_for_env \
 			env=${PREFIX_TEST} \
 			override_file="-f ${DOCKER_COMPOSE_TEST_FILE}" \
