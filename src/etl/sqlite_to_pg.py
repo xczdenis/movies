@@ -15,7 +15,7 @@ pg_client: PGClient = PGClient.from_url(
         port=pg_config.POSTGRES_PORT,
         database=pg_config.POSTGRES_DB,
     ),
-    config={"cursor_factory": RealDictCursor},
+    config={'cursor_factory': RealDictCursor},
 )
 
 

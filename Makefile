@@ -155,17 +155,17 @@ init:
 		echo ""; \
 		echo "---------------------------------"; \
 		echo "${BLUE}Installing requirements${RESET}"; \
-		echo "command: ${PURPLE}poetry install${RESET}"; \
+		echo "${YELLOW}run command: ${PURPLE}poetry install${RESET}"; \
 		poetry install; \
 		echo ""; \
 		echo "---------------------------------"; \
 		echo "${BLUE}Installing pre-commit hooks${RESET}"; \
-		echo "command: ${PURPLE}pre-commit install${RESET}"; \
+		echo "${YELLOW}run command: ${PURPLE}pre-commit install${RESET}"; \
 		pre-commit install; \
 		echo ""; \
 		echo "---------------------------------"; \
 		echo "${BLUE}Installing pre-commit msg check${RESET}"; \
-		echo "command: ${PURPLE}pre-commit install --hook-type commit-msg${RESET}"; \
+		echo "${YELLOW}run command: ${PURPLE}pre-commit install --hook-type commit-msg${RESET}"; \
 		pre-commit install --hook-type commit-msg; \
 	fi
 
