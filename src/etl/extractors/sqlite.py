@@ -18,7 +18,9 @@ class SQLiteExtractor(Extractor):
     def extract(self, *args, **kwargs) -> Generator:
         cursor = self.cursor
         try:
-            cursor.execute("SELECT * FROM {table}".format(table=self.table))
+            # cursor.execute("SELECT * FROM {table}".format(table=self.table))
+            query = "SELECT * FROM {table}"
+            cursor.execute(query, (self.table,))
         except Exception as e:
             logger.error(
                 "Unable to fetch data from SQLite table '{table}': {e}".format(table=self.table, e=e)

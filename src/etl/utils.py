@@ -1,9 +1,9 @@
-def normalize_value(value, type):
+def normalize_value(value, target_type):
     if value is None:
-        if type == int:
+        if target_type == int:
             return 0
-        elif type == float:
+        elif target_type == float:
             return 0.0
-        elif type == str:
+        elif target_type == str:
             return ""
     return value

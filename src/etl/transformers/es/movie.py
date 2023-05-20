@@ -37,7 +37,7 @@ class MovieTransformer(ESTransformer):
     @staticmethod
     def __add_persons(row_data, field: str, role: str) -> None:
         persons = MovieTransformer.__get_persons_by_role(row_data, role)
-        row_data[field] = [person for person in persons]
+        row_data[field] = list(persons)
 
     @staticmethod
     def __add_persons_names(row_data, field: str, role: str) -> None:

@@ -43,3 +43,9 @@ repos:
         rev: 6.0.0
         hooks:
             -   id: flake8
+                additional_dependencies:
+                    - flake8-comprehensions
+                    - flake8-quotes
+                    - pep8-naming
+                    - flake8-bandit
+                    - flake8-black
