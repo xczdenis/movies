@@ -167,6 +167,17 @@ init:
 		pre-commit install --hook-type commit-msg; \
 	fi
 
+
+.PHONY: lint
+lint:
+	@./src/scripts/lint.sh
+
+
+.PHONY: format
+format:
+	@./src/scripts/format.sh
+
+
 # remove all existing containers, volumes, images
 .PHONY: remove
 remove:

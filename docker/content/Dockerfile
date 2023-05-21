@@ -17,7 +17,7 @@ WORKDIR ${work_dir}
 
 FROM base as builder
 
-COPY ./docker/scripts /scripts
+COPY ./scripts /scripts
 RUN chmod -R 777 /scripts
 
 COPY ./docker/${pck_name}/scripts /scripts
