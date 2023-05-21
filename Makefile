@@ -144,28 +144,7 @@ endef
 
 .PHONY: init
 init:
-	$(call log, Init project)
-	@if [ -z "$$VIRTUAL_ENV" ]; then \
-		echo "${RED}Virtual environment is NOT ACTIVE!${RESET}"; \
-		echo "Please make sure that virtual environment is activated and then run '${PURPLE}make init${RESET}' again."; \
-	else \
-		echo "${BLUE}Virtual environment is active: ${ORANGE}${VIRTUAL_ENV}${RESET}"; \
-		echo ""; \
-		echo "---------------------------------"; \
-		echo "${BLUE}Installing requirements${RESET}"; \
-		echo "${YELLOW}run command: ${PURPLE}poetry install${RESET}"; \
-		poetry install; \
-		echo ""; \
-		echo "---------------------------------"; \
-		echo "${BLUE}Installing pre-commit hooks${RESET}"; \
-		echo "${YELLOW}run command: ${PURPLE}pre-commit install${RESET}"; \
-		pre-commit install; \
-		echo ""; \
-		echo "---------------------------------"; \
-		echo "${BLUE}Installing pre-commit msg check${RESET}"; \
-		echo "${YELLOW}run command: ${PURPLE}pre-commit install --hook-type commit-msg${RESET}"; \
-		pre-commit install --hook-type commit-msg; \
-	fi
+	@./src/scripts/init.sh
 
 
 .PHONY: lint

@@ -83,7 +83,7 @@ log_error() (
 )
 
 log_header() (
-    text=$(trim ${1})
+    text=${1}
 
     echo ""
     echo "${color_white}----------------------------------------${color_reset}"

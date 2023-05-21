@@ -17,6 +17,7 @@ check_service() (
 check_env_is_activated() (
     if [[ -z "$VIRTUAL_ENV" ]]; then
         echo "${color_red}ERROR: Python virtual environment is not activated!${color_reset}"
+        echo "Please make sure that virtual environment is activated and then run your command again."
         exit 1
     fi
 )
