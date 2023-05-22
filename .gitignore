@@ -1,4 +1,6 @@
 *.sqlite
+!fake-db.sqlite
+
 site
 .env.local
 .DS_Storemain
