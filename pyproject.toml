@@ -50,9 +50,10 @@ autoflake = "^2.1.1"
 
 
 [tool.poetry.group.tests.dependencies]
-pytest = "7.1.2"
-pytest-asyncio = "0.12.0"
 Faker = "^18.7.0"
+httpx = "^0.24.1"
+pytest = "^7.3.1"
+pytest-asyncio = "^0.21.0"
 
 
 [tool.poetry.group.etl.dependencies]
@@ -72,8 +73,12 @@ force_grid_wrap = 0
 use_parentheses = true
 
 [tool.pytest.ini_options]
-pythonpath = ["search/src", "app"]
-addopts = "-v -p no:warnings"
+#pythonpath = ["search/src", "app"]
+#addopts = "-v -p no:warnings"
+#addopts = ["-v", "-rP", "-p", "no:warnings", "--import-mode=importlib",]
+addopts = ["-v", "-p", "no:warnings", "--import-mode=importlib",]
+asyncio_mode = "auto"
+
 
 [build-system]
 requires = ["poetry-core"]

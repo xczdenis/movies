@@ -5,9 +5,9 @@ x-base-service: &base-service
         - default
 
 x-common-healthcheck: &common-healthcheck
-    interval: 5s
-    timeout: 5s
-    retries: 10
+    interval: 3s
+    timeout: 2s
+    retries: 20
 
 services:
     adminpanel_proxy:
@@ -51,7 +51,7 @@ services:
         volumes:
             - adminpanel-static:/${CONTAINER_WORK_DIR}/src/${ADMINPANEL_PKG_NAME}/staticfiles
         healthcheck:
-            test: [ "CMD", "/scripts/wait-for-it.sh", "adminpanel:8000" ]
+            test: [ "CMD", "./scripts/wait-for-it.sh", "adminpanel:8000" ]
             <<: *common-healthcheck
         depends_on:
             postgres:
@@ -99,7 +99,7 @@ services:
             ELASTIC_HOST: elasticsearch
             ELASTIC_PORT: 9200
         healthcheck:
-            test: [ "CMD", "/scripts/wait-for-it.sh", "content:8000" ]
+            test: [ "CMD", "./scripts/wait-for-it.sh", "content:8000" ]
             <<: *common-healthcheck
         depends_on:
             elasticsearch:
@@ -118,7 +118,7 @@ services:
             args:
                 - img=${POSTGRES_IMG}
         healthcheck:
-            test: [ "CMD", "/scripts/wait-for-it.sh", "postgres:5432" ]
+            test: [ "CMD", "./scripts/wait-for-it.sh", "postgres:5432" ]
             <<: *common-healthcheck
         profiles:
             - default
@@ -136,7 +136,7 @@ services:
         environment:
             discovery.type: single-node
         healthcheck:
-            test: [ "CMD", "/scripts/wait-for-it.sh", "elasticsearch:9200" ]
+            test: [ "CMD", "./scripts/wait-for-it.sh", "elasticsearch:9200" ]
             <<: *common-healthcheck
         profiles:
             - default

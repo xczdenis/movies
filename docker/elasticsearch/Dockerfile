@@ -1,4 +1,4 @@
 ARG img=docker.io/elastic/elasticsearch:8.7.1
 
 FROM ${img}
-COPY ./scripts /scripts
+COPY ./scripts ./scripts

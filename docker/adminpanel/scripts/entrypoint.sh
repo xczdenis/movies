@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-. /scripts/logger.sh
+. ./scripts/logger.sh
 
-/scripts/wait-dependencies.sh
+./scripts/wait-dependencies.sh
 
 . ./.venv/bin/activate
 
@@ -19,6 +19,6 @@ log_info "Create superuser"
 python src/"${ADMINPANEL_PKG_NAME}"/manage.py create_superuser
 echo ""
 
-/scripts/start.sh
+./scripts/start.sh
 
 exec "$@"

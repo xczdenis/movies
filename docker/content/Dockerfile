@@ -17,11 +17,11 @@ WORKDIR ${work_dir}
 
 FROM base as builder
 
-COPY ./scripts /scripts
-RUN chmod -R 777 /scripts
+COPY ./scripts ./scripts
+RUN chmod -R 777 ./scripts
 
-COPY ./docker/${pck_name}/scripts /scripts
-RUN chmod -R 777 /scripts
+COPY ./docker/${pck_name}/scripts ./scripts
+RUN chmod -R 777 ./scripts
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -44,7 +44,7 @@ RUN poetry config virtualenvs.in-project true \
 
 FROM base as final
 
-COPY --from=builder /scripts /scripts
+COPY --from=builder /${work_dir}/scripts ./scripts
 COPY --from=builder /${work_dir}/.venv ./.venv
 
 
@@ -58,4 +58,4 @@ COPY ./src/${pck_name} ./src/${pck_name}
 
 FROM ${env}
 
-ENTRYPOINT ["/scripts/entrypoint.sh"]
+ENTRYPOINT ["./scripts/entrypoint.sh"]

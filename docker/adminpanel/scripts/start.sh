@@ -1,5 +1,5 @@
 #!/bin/sh
-. /scripts/logger.sh
+. ./scripts/logger.sh
 
 
 if [ "x$ENVIRONMENT" = 'xdevelopment' ]; then

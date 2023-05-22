@@ -11,5 +11,5 @@ check_env_is_activated
 log_header "Lint project"
 run_command_with_logs "Check black" "black --check ./src"
 run_command_with_logs "Check isort" "isort --check-only ./src"
-run_command_with_logs "Check flake8" "flake8"
+run_command_with_logs "Check flake8" "flake8 ./src"
 run_command_with_logs "Check unused imports and variables" "autoflake -r --remove-unused-variables --remove-all-unused-imports --ignore-init-module-imports ./src"

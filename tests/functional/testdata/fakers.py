@@ -3,34 +3,46 @@ from dataclasses import dataclass
 
 from elasticsearch import AsyncElasticsearch, NotFoundError, RequestError
 from loguru import logger
+
 from tests.functional.testdata.data_generators import DataGenerator
 
 
 @dataclass
 class ElasticFaker:
-    client: AsyncElasticsearch
+    db_client: AsyncElasticsearch
     index_name: str
-    index_path: str
+    path_to_index_config: str
     generator: DataGenerator
     pars_data_by_alias: bool = False
 
     async def create_index(self):
-        if not await self.client.indices.exists(index=self.index_name):
-            with open(self.index_path) as f:
-                try:
-                    schema = json.load(f)
-                except Exception as e:
-                    logger.error(e)
-                    raise e
-                try:
-                    await self.client.indices.create(index=self.index_name, body=schema)
-                except RequestError as e:
-                    if e.error != "resource_already_exists_exception":
-                        raise e
+        if not await self.index_exists():
+            schema = await self.get_index_schema()
+            await self.create_index_by_schema(schema)
+
+    async def index_exists(self) -> bool:
+        return await self.db_client.indices.exists(index=self.index_name)
+
+    async def get_index_schema(self) -> dict:
+        schema = {}
+        with open(self.path_to_index_config) as index_config_file:
+            try:
+                schema = json.load(index_config_file)
+            except Exception as e:
+                logger.error(e)
+                raise e
+        return schema
+
+    async def create_index_by_schema(self, schema: dict):
+        try:
+            await self.db_client.indices.create(index=self.index_name, body=schema)
+        except RequestError as e:
+            if e.error != "resource_already_exists_exception":
+                raise e
 
     async def delete_index(self):
         try:
-            await self.client.indices.delete(index=self.index_name)
+            await self.db_client.indices.delete(index=self.index_name)
         except NotFoundError:
             pass
 
@@ -42,7 +54,7 @@ class ElasticFaker:
                 item.dict(by_alias=self.pars_data_by_alias),
             ]
 
-        resp = await self.client.bulk(body=es_data)
+        resp = await self.db_client.bulk(body=es_data)
         if resp["errors"]:
             try:
                 index = resp["items"][0]["index"]["_index"]
@@ -56,7 +68,7 @@ class ElasticFaker:
         await self.refresh_index()
 
     async def refresh_index(self):
-        await self.client.indices.refresh(index=self.index_name)
+        await self.db_client.indices.refresh(index=self.index_name)
 
-    async def generate_data(self):
-        return await self.generator.generate_data()
+    def generate_data(self):
+        return self.generator.generate_data()

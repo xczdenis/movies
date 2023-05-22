@@ -3,7 +3,7 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 
 from content.api.params import PaginateModel
-from content.api.utils import get_rout_name
+from content.api.utils import make_rout_name
 from content.api.v1.schemas.genres import GenreResponse
 from content.db.shared import Filter
 from content.pagination import Page, paginate
@@ -14,7 +14,7 @@ NAMESPACE = "genres"
 router = APIRouter(prefix=f"/{NAMESPACE}", tags=["Genres"])
 
 
-@router.get("/", name=get_rout_name(NAMESPACE, "list"), response_model=Page[GenreResponse])
+@router.get("/", name=make_rout_name(NAMESPACE, "list"), response_model=Page[GenreResponse])
 async def genres_list(
     pagination: PaginateModel = Depends(),
     query: str = Query(None, description="The name of the genre to get"),
@@ -38,7 +38,7 @@ async def genres_list(
     )
 
 
-@router.get("/{genre_id}/", name=get_rout_name(NAMESPACE, "detail"), response_model=GenreResponse)
+@router.get("/{genre_id}/", name=make_rout_name(NAMESPACE, "detail"), response_model=GenreResponse)
 async def genre_detail(
     genre_id: str = Path(description="The ID of the genre to get"),
     service: GenreService = Depends(get_genre_service),

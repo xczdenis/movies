@@ -3,7 +3,7 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 
 from content.api.params import PaginateModel
-from content.api.utils import get_rout_name
+from content.api.utils import make_rout_name
 from content.api.v1.schemas.persons import PersonResponse
 from content.db.shared import Filter, Term
 from content.models.film import Film
@@ -17,7 +17,7 @@ router = APIRouter(prefix=f"/{NAMESPACE}", tags=["Persons"])
 
 @router.get(
     "/",
-    name=get_rout_name(NAMESPACE, "list"),
+    name=make_rout_name(NAMESPACE, "list"),
     response_model=Page[PersonResponse],
     response_description="List of persons",
 )
@@ -44,7 +44,7 @@ async def persons_list(
     )
 
 
-@router.get("/{person_id}/", name=get_rout_name(NAMESPACE, "detail"), response_model=PersonResponse)
+@router.get("/{person_id}/", name=make_rout_name(NAMESPACE, "detail"), response_model=PersonResponse)
 async def person_detail(
     person_id: str = Path(description="The ID of the person to get"),
     service: PersonService = Depends(get_person_service),
@@ -59,7 +59,7 @@ async def person_detail(
 
 
 @router.get(
-    "/{person_id}/films/", name=get_rout_name(NAMESPACE, "films_by_person"), response_model=Page[Film]
+    "/{person_id}/films/", name=make_rout_name(NAMESPACE, "films_by_person"), response_model=Page[Film]
 )
 async def films_by_person(
     person_id: str = Path(description="The ID of the person whose films you want to get"),

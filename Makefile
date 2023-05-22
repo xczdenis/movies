@@ -241,8 +241,8 @@ run-content: down
 
 
 # build and run tests in docker for api profile
-.PHONY: test
-test: down
+.PHONY: test-docker
+test-docker: down
 	$(call log, Run tests in docker for api profile)
 	@if [ "${DOCKER_COMPOSE_TEST_FILE}" != "_" ]; then \
 		make run_docker_compose_for_env \
@@ -254,8 +254,8 @@ test: down
 	fi \
 
 
-.PHONY: test-local
-test-local:
+.PHONY: test
+test:
 	@cd $(CURDIR) && python -m pytest
 
 # show container's logs

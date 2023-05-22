@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-. /scripts/colors.sh
-. /scripts/logger.sh
-. /scripts/helpers.sh
+. ./scripts/colors.sh
+. ./scripts/logger.sh
+. ./scripts/helpers.sh
 
 
 check_service "Redis" "${REDIS_HOST}" "${REDIS_PORT}"

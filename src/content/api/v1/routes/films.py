@@ -3,7 +3,7 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends, HTTPException, Path
 
 from content.api.params import PaginateModel, SortModel
-from content.api.utils import get_rout_name
+from content.api.utils import make_rout_name
 from content.api.v1.schemas.films import FilmRequest, FilmResponse
 from content.db.shared import Filter, Term
 from content.pagination import Page, paginate
@@ -16,7 +16,7 @@ router = APIRouter(prefix=f"/{NAMESPACE}", tags=["Films"])
 
 @router.get(
     "/",
-    name=get_rout_name(NAMESPACE, "list"),
+    name=make_rout_name(NAMESPACE, "list"),
     response_model=Page[FilmResponse],
     response_description="List of films",
 )
@@ -48,7 +48,7 @@ async def films_list(
     )
 
 
-@router.get("/{film_id}/", name=get_rout_name(NAMESPACE, "detail"), response_model=FilmResponse)
+@router.get("/{film_id}/", name=make_rout_name(NAMESPACE, "detail"), response_model=FilmResponse)
 async def film_detail(
     film_id: str = Path(description="The ID of the film to get"),
     service: FilmService = Depends(get_film_service),
