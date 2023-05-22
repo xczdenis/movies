@@ -40,9 +40,7 @@ RUN poetry config virtualenvs.in-project true \
 
 FROM base as final
 
-COPY --from=builder /${work_dir}/scripts ./scripts
-COPY --from=builder /${work_dir}/.venv ./.venv
-COPY --from=builder /${work_dir}/src ./src
-COPY --from=builder /${work_dir}/tests ./tests
+COPY --from=builder /${work_dir} /${work_dir}
+
 
 ENTRYPOINT ["./scripts/entrypoint.sh"]
