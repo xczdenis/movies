@@ -241,22 +241,17 @@ run-content: down
 
 
 # build and run tests in docker for api profile
-.PHONY: test-docker
-test-docker: down
+.PHONY: tests-docker
+tests-docker: down
 	$(call log, Run tests in docker for api profile)
 	@if [ "${DOCKER_COMPOSE_TEST_FILE}" != "_" ]; then \
 		make run_docker_compose_for_env \
 			env=${PREFIX_TEST} \
 			override_file="-f ${DOCKER_COMPOSE_TEST_FILE}" \
-			cmd="--profile api ${COMPOSE_OPTION_START_AS_DEMON}"; \
+			cmd="--profile default --profile tests ${COMPOSE_OPTION_START_AS_DEMON}"; \
 	else \
 		echo "${RED}ERROR:${RESET} No such file '${DOCKER_COMPOSE_TEST_FILE_NAME}'. Tests cannot be run."; \
 	fi \
-
-
-.PHONY: test
-test:
-	@cd $(CURDIR) && python -m pytest
 
 # show container's logs
 .PHONY: logs _logs
@@ -305,6 +300,11 @@ config:
 	$(call run_docker_compose_for_current_env, ${COMPOSE_PROFILE_DEFAULT} config)
 
 
+.PHONY: tests
+tests:
+	@cd $(CURDIR) && python -m pytest
+
+
 .PHONY: db-update
 db-update:
 	python src/adminpanel/manage.py makemigrations
@@ -323,10 +323,14 @@ migrate: db-update db-upgrade
 su:
 	@python src/adminpanel/manage.py create_superuser
 
-
 .PHONY: adminpanel
 adminpanel:
 	@python src/adminpanel/manage.py runserver ${ADMINPANEL_APP_HOST}:${ADMINPANEL_APP_PORT}
+
+
+.PHONY: content
+content:
+	python src/content/main.py
 
 
 .PHONY: sql-to-pg
@@ -337,8 +341,3 @@ sql-to-pg:
 .PHONY: pg-to-es
 pg-to-es:
 	python src/etl/pg_to_es.py
-
-
-.PHONY: content
-content:
-	python src/content/main.py

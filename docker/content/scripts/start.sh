@@ -3,7 +3,6 @@
 
 . ./.venv/bin/activate
 
-#!/bin/sh
 if [ "x$ENVIRONMENT" = 'xdevelopment' ]; then
     log_info "Run in development mode"
     python ./src/"${CONTENT_PKG_NAME}"/main.py

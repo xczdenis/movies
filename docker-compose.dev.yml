@@ -1,8 +1,6 @@
 services:
     adminpanel_proxy:
         restart: "no"
-        environment:
-            ADMINPANEL_APP_LISTEN_PORT: 8000
         ports:
             - ${ADMINPANEL_APP_PORT}:8000
 
@@ -15,8 +13,6 @@ services:
 
     content_proxy:
         restart: "no"
-        environment:
-            CONTENT_APP_LISTEN_PORT: 8000
         ports:
             - ${CONTENT_APP_PORT}:8000
 

@@ -73,8 +73,6 @@ force_grid_wrap = 0
 use_parentheses = true
 
 [tool.pytest.ini_options]
-#pythonpath = ["search/src", "app"]
-#addopts = "-v -p no:warnings"
 #addopts = ["-v", "-rP", "-p", "no:warnings", "--import-mode=importlib",]
 addopts = ["-v", "-p", "no:warnings", "--import-mode=importlib",]
 asyncio_mode = "auto"
