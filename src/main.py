@@ -22,7 +22,9 @@ class ElasticFaker:
 async def main():
     es_client = AsyncElasticsearch(hosts=["http://elasticsearch:9200"], basic_auth=("elastic", "123qwe"))
     # person_faker = ElasticFaker(db_client=es_client, index_name="movies")
-
+    timeout = 20
+    print(f"sleep {timeout} sec")
+    await asyncio.sleep(timeout)
     response = await es_client.ping()
     print(f"ping = {response}")
 
