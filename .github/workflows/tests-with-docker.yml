@@ -35,9 +35,9 @@ jobs:
                 env:
                     DOCKER_BUILDKIT: 1
                     BUILDKIT_INLINE_CACHE: 1
-                    ELASTIC_HOST: localhost
+                    ELASTIC_HOST: elasticsearch
                     ELASTIC_PORT: 9200
-                    ELASTIC_USE: elastic
+                    ELASTIC_USER: elastic
                     ELASTIC_PASSWORD: 123qwe
 
             -   name: Run tests in docker
@@ -45,8 +45,8 @@ jobs:
                 env:
                     DOCKER_BUILDKIT: 1
                     BUILDKIT_INLINE_CACHE: 1
-                    ELASTIC_HOST: localhost
+                    ELASTIC_HOST: elasticsearch
                     ELASTIC_PORT: 9200
-                    ELASTIC_USE: elastic
+                    ELASTIC_USER: elastic
                     ELASTIC_PASSWORD: 123qwe
 

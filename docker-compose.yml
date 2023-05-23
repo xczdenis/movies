@@ -136,6 +136,8 @@ services:
         env_file: .env
         environment:
             discovery.type: single-node
+            ELASTIC_USER: elastic
+            ELASTIC_PASSWORD: 123qwe
         healthcheck:
             test: [ "CMD", "./scripts/wait-for-it.sh", "elasticsearch:9200" ]
             <<: *common-healthcheck
