@@ -1,5 +1,5 @@
 services:
-    ttests:
+    tests:
         platform: ${DOCKER_IMG_PLATFORM:-linux/amd64}
         build:
             context: .
@@ -17,17 +17,6 @@ services:
             - redis
         profiles:
             - tests
-        volumes:
-            - ./src:/src
-            - ./docker/tests/scripts:/tscripts
-            - ./scripts:/scripts
-#        entrypoint: [". ./scripts/wait-dependencies.sh"]
-#        command: >
-#            bash -c ". ./tscripts/wait-dependencies.sh"
-        command: bash -c "
-            . ./tscripts/wait-dependencies.sh
-            && python src/main.py
-            "
 
     postgres:
         volumes:
