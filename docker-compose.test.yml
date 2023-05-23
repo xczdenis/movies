@@ -13,8 +13,10 @@ services:
             ELASTIC_HOST: elasticsearch
             ELASTIC_PORT: 9200
         depends_on:
-            - elasticsearch
-            - redis
+            elasticsearch:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
         profiles:
             - tests
         volumes:
