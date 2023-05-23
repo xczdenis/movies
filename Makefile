@@ -99,14 +99,14 @@ define run_docker_compose_for_env
 endef
 run_docker_compose_for_env:
 	@if [ $(strip ${env}) != "_" ]; then \
-		echo DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+		DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 		COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} \
 		docker-compose \
 			-f ${DOCKER_COMPOSE_MAIN_FILE} \
 			$(strip ${override_file}) \
 			$(strip ${cmd}); \
     else \
-		echo DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+		DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 		COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} \
 		docker-compose \
 			-f ${DOCKER_COMPOSE_MAIN_FILE} \

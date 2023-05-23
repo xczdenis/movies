@@ -13,10 +13,8 @@ services:
             ELASTIC_HOST: elasticsearch
             ELASTIC_PORT: 9200
         depends_on:
-            elasticsearch:
-                condition: service_healthy
-            redis:
-                condition: service_started
+            - elasticsearch
+            - redis
         profiles:
             - tests
 
@@ -27,6 +25,8 @@ services:
     elasticsearch:
         volumes:
             - es_data_test:/usr/share/elasticsearch/data
+        ports:
+            - ${ELASTIC_PORT}:9200
 
     redis:
         volumes:
