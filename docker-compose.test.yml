@@ -16,7 +16,7 @@ services:
             elasticsearch:
                 condition: service_healthy
             redis:
-                condition: service_healthy
+                condition: service_started
         profiles:
             - tests
         volumes:
