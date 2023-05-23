@@ -83,8 +83,8 @@ async def main_real_ip():
 async def main():
     await main_http()
     await main_https()
-    await main_http_sync()
     await main_real_ip()
+    await main_http_sync()
 
 
 if __name__ == "__main__":
