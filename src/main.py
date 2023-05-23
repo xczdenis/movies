@@ -1,4 +1,5 @@
 import asyncio
+import socket
 from dataclasses import dataclass
 
 from elasticsearch import AsyncElasticsearch, Elasticsearch
@@ -48,9 +49,34 @@ async def main_https():
 
 
 async def main_http_sync():
-    es_client = Elasticsearch(hosts=["http://elasticsearch:9200"], basic_auth=("elastic", "123qwe"))
-    response = es_client.ping()
-    print(f"main_https ping = {response}")
+    es_client = Elasticsearch(
+        hosts=["http://elasticsearch:9200"], basic_auth=("elastic", "123qwe"), request_timeout=4
+    )
+
+    hostname = "elasticsearch"  # Замените на имя вашего хоста
+    ip_address = socket.gethostbyname(hostname)
+    print(f"IP address of {hostname} is {ip_address}")
+
+    response = es_client.search()
+    print(f"search = {response}")
+
+    response = es_client.info()
+    print(f"info = {response}")
+    es_client.close()
+
+
+async def main_real_ip():
+    hostname = "elasticsearch"  # Замените на имя вашего хоста
+    ip_address = socket.gethostbyname(hostname)
+    print(f"main_real_ip IP address of {hostname} is {ip_address}")
+
+    es_client = Elasticsearch(hosts=[f"http://{ip_address}:9200"], basic_auth=("elastic", "123qwe"))
+
+    response = es_client.search()
+    print(f"search = {response}")
+
+    response = es_client.info()
+    print(f"info = {response}")
     es_client.close()
 
 
@@ -58,6 +84,7 @@ async def main():
     await main_http()
     await main_https()
     await main_http_sync()
+    await main_real_ip()
 
 
 if __name__ == "__main__":
