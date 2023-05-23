@@ -99,14 +99,14 @@ define run_docker_compose_for_env
 endef
 run_docker_compose_for_env:
 	@if [ $(strip ${env}) != "_" ]; then \
-		DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+		echo DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 		COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} \
 		docker-compose \
 			-f ${DOCKER_COMPOSE_MAIN_FILE} \
 			$(strip ${override_file}) \
 			$(strip ${cmd}); \
     else \
-		DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+		echo DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 		COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} \
 		docker-compose \
 			-f ${DOCKER_COMPOSE_MAIN_FILE} \
@@ -290,7 +290,7 @@ config:
 # build and run tests in docker
 .PHONY: tests-docker
 tests-docker: down
-	$(call log, Run tests in docker for api profile)
+	$(call log, Run tests in docker)
 	@if [ "${DOCKER_COMPOSE_TEST_FILE}" != "_" ]; then \
 		make run_docker_compose_for_env \
 			env=${PREFIX_TEST} \
