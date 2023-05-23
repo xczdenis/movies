@@ -21,13 +21,10 @@ services:
             - tests
         volumes:
             - ./src:/src
-            - ./docker/tests/scripts:/scripts
+            - ./docker/tests/scripts:/test_scripts
             - ./scripts:/scripts
-#        entrypoint: [". ./scripts/wait-dependencies.sh"]
-#        command: >
-#            bash -c ". ./scripts/wait-dependencies.sh"
         command: sh -c "
-            . ./scripts/wait-dependencies.sh
+            . ./test_scripts/wait-dependencies.sh
             && python src/main.py
             "
 
