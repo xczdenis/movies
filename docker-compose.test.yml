@@ -21,12 +21,12 @@ services:
             - tests
         volumes:
             - ./src:/src
-            - ./docker/tests/scripts:/test_scripts
-            - ./scripts:/scripts
-        command: sh -c "
-            . ./test_scripts/wait-dependencies.sh
-            && python src/main.py
-            "
+#            - ./docker/tests/scripts:/test_scripts
+#            - ./scripts:/scripts
+#        command: sh -c "
+#            . /test_scripts/wait-dependencies.sh
+#            && python src/main.py
+#            "
 
     postgres:
         volumes:
