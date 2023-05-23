@@ -20,7 +20,7 @@ class ElasticFaker:
 
 
 async def main():
-    es_client = AsyncElasticsearch("http://elasticsearch:9200", basic_auth=("elastic", "123qwe"))
+    es_client = AsyncElasticsearch("http://elasticsearch:9200", basic_auth=("elastic", "123qwe1"))
     person_faker = ElasticFaker(db_client=es_client, index_name="movies")
 
     response = await es_client.ping()
