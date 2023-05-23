@@ -1,7 +1,7 @@
 import asyncio
 from dataclasses import dataclass
 
-from elasticsearch import AsyncElasticsearch
+from elasticsearch import AsyncElasticsearch, Elasticsearch
 
 
 @dataclass
@@ -22,9 +22,9 @@ class ElasticFaker:
 async def main_http():
     es_client = AsyncElasticsearch(hosts=["http://elasticsearch:9200"], basic_auth=("elastic", "123qwe"))
     # person_faker = ElasticFaker(db_client=es_client, index_name="movies")
-    timeout = 20
-    print(f"sleep {timeout} sec")
-    await asyncio.sleep(timeout)
+    # timeout = 20
+    # print(f"sleep {timeout} sec")
+    # await asyncio.sleep(timeout)
     response = await es_client.ping()
     print(f"main_http ping = {response}")
 
@@ -36,9 +36,9 @@ async def main_http():
 async def main_https():
     es_client = AsyncElasticsearch(hosts=["https://elasticsearch:9200"], basic_auth=("elastic", "123qwe"))
     # person_faker = ElasticFaker(db_client=es_client, index_name="movies")
-    timeout = 20
-    print(f"sleep {timeout} sec")
-    await asyncio.sleep(timeout)
+    # timeout = 20
+    # print(f"sleep {timeout} sec")
+    # await asyncio.sleep(timeout)
     response = await es_client.ping()
     print(f"main_https ping = {response}")
 
@@ -47,9 +47,17 @@ async def main_https():
     await es_client.close()
 
 
+async def main_http_sync():
+    es_client = Elasticsearch(hosts=["http://elasticsearch:9200"], basic_auth=("elastic", "123qwe"))
+    response = es_client.ping()
+    print(f"main_https ping = {response}")
+    es_client.close()
+
+
 async def main():
     await main_http()
     await main_https()
+    await main_http_sync()
 
 
 if __name__ == "__main__":
