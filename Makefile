@@ -240,19 +240,6 @@ run-content: down
 	$(call run_docker_compose_for_current_env, --profile content ${COMPOSE_OPTION_START_AS_DEMON} ${s})
 
 
-# build and run tests in docker for api profile
-.PHONY: tests-docker
-tests-docker: down
-	$(call log, Run tests in docker for api profile)
-	@if [ "${DOCKER_COMPOSE_TEST_FILE}" != "_" ]; then \
-		make run_docker_compose_for_env \
-			env=${PREFIX_TEST} \
-			override_file="-f ${DOCKER_COMPOSE_TEST_FILE}" \
-			cmd="--profile default --profile tests ${COMPOSE_OPTION_START_AS_DEMON}"; \
-	else \
-		echo "${RED}ERROR:${RESET} No such file '${DOCKER_COMPOSE_TEST_FILE_NAME}'. Tests cannot be run."; \
-	fi \
-
 # show container's logs
 .PHONY: logs _logs
 logs:
@@ -298,6 +285,24 @@ _stop:
 config:
 	$(call log, Docker-compose configuration (${CURRENT_ENVIRONMENT_PREFIX}))
 	$(call run_docker_compose_for_current_env, ${COMPOSE_PROFILE_DEFAULT} config)
+
+
+# build and run tests in docker
+.PHONY: tests-docker
+tests-docker: down
+	$(call log, Run tests in docker for api profile)
+	@if [ "${DOCKER_COMPOSE_TEST_FILE}" != "_" ]; then \
+		make run_docker_compose_for_env \
+			env=${PREFIX_TEST} \
+			override_file="-f ${DOCKER_COMPOSE_TEST_FILE}" \
+			cmd="--profile default --profile tests build"; \
+    	make run_docker_compose_for_env \
+			env=${PREFIX_TEST} \
+			override_file="-f ${DOCKER_COMPOSE_TEST_FILE}" \
+			cmd="--profile default --profile tests run tests"; \
+	else \
+		echo "${RED}ERROR:${RESET} No such file '${DOCKER_COMPOSE_TEST_FILE_NAME}'. Tests cannot be run."; \
+	fi \
 
 
 .PHONY: tests

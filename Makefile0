@@ -78,12 +78,12 @@ endif
 
 
 define run_docker_compose
-	echo DOCKER_BUILDKIT=$(DOCKER_BUILDKIT) COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME)-$(1) docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(2) $(3) $(4)
+	DOCKER_BUILDKIT=$(DOCKER_BUILDKIT) COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME)-$(1) docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) -f $(2) $(3) $(4)
 endef
 
 
 define run_docker_compose_pure
-	echo docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) $(1)
+	docker-compose -f $(DOCKER_COMPOSE_MAIN_FILE) $(1)
 endef
 
 

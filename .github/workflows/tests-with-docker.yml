@@ -15,8 +15,6 @@ jobs:
             -   name: Checkout
                 uses: actions/checkout@v3
             -   name: Create env file
-                run: printf "${{ secrets.ENVS_PROD }}" >> .envs/production/.env
+                run: printf "${{ secrets.ENVS_PROD }}" >> .env
             -   name: Build docker-compose images
-                run: make ci-tests-build
-            -   name: Run tests for service search
-                run: make ci-run-tests s=tests_search
+                run: make tests-docker
