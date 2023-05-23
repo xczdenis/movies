@@ -1,5 +1,5 @@
 services:
-    ttests:
+    tests:
         platform: ${DOCKER_IMG_PLATFORM:-linux/amd64}
         build:
             context: .

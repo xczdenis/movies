@@ -299,7 +299,7 @@ tests-docker: down
     	make run_docker_compose_for_env \
 			env=${PREFIX_TEST} \
 			override_file="-f ${DOCKER_COMPOSE_TEST_FILE}" \
-			cmd="--profile default --profile tests run ttests"; \
+			cmd="--profile default --profile tests run tests"; \
 	else \
 		echo "${RED}ERROR:${RESET} No such file '${DOCKER_COMPOSE_TEST_FILE_NAME}'. Tests cannot be run."; \
 	fi \
