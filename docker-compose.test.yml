@@ -24,7 +24,7 @@ services:
 #        entrypoint: [". ./scripts/wait-dependencies.sh"]
 #        command: >
 #            bash -c ". ./tscripts/wait-dependencies.sh"
-        command: bash -c "
+        command: sh -c "
             . ./tscripts/wait-dependencies.sh
             && python src/main.py
             "
