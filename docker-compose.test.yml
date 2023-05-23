@@ -21,7 +21,7 @@ services:
             - tests
         volumes:
             - ./src:/src
-            - ./docker/tests/scripts:/tscripts
+            - ./docker/tests/scripts:/scripts
             - ./scripts:/scripts
 #        entrypoint: [". ./scripts/wait-dependencies.sh"]
 #        command: >
