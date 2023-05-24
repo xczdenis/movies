@@ -1,6 +1,5 @@
 #!/bin/sh
 
-#. ./.venv/bin/activate
+. ./.venv/bin/activate
 
-#python -m pytest
-python /src/main.py
+python -m pytest
