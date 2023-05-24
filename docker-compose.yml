@@ -136,7 +136,7 @@ services:
         env_file: .env
         environment:
             discovery.type: single-node
-            xpack.security.enabled: false
+            xpack.security.enabled: "false"
             ELASTIC_USER: elastic
             ELASTIC_PASSWORD: 123qwe
         healthcheck:
