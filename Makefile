@@ -290,7 +290,7 @@ config:
 # build and run tests in docker
 .PHONY: tests-docker
 tests-docker: down
-	$(call log, Run tests in docker for api profile)
+	$(call log, Run tests in docker)
 	@if [ "${DOCKER_COMPOSE_TEST_FILE}" != "_" ]; then \
 		make run_docker_compose_for_env \
 			env=${PREFIX_TEST} \

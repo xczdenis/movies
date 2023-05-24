@@ -1,4 +1,3 @@
-ARG env=production
 ARG img=python:3.11-slim
 ARG work_dir=app
 
@@ -8,16 +7,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     POETRY_VERSION=1.4.0
 
-ARG env
 ARG work_dir
 
 WORKDIR ${work_dir}
 
+
 FROM base as builder
 
 COPY ./scripts ./scripts
-RUN chmod -R 777 ./scripts
-
 COPY ./docker/tests/scripts ./scripts
 RUN chmod -R 777 ./scripts
 
@@ -38,9 +35,8 @@ RUN poetry config virtualenvs.in-project true \
     && poetry install --only main,content,tests
 
 
-FROM base as final
+FROM base
 
 COPY --from=builder /${work_dir} /${work_dir}
-
 
 ENTRYPOINT ["./scripts/entrypoint.sh"]

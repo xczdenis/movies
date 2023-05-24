@@ -1,8 +1,6 @@
 x-base-service: &base-service
     platform: ${DOCKER_IMG_PLATFORM:-linux/amd64}
     restart: on-failure
-    profiles:
-        - default
 
 x-common-healthcheck: &common-healthcheck
     interval: 3s
