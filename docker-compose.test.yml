@@ -4,6 +4,9 @@ services:
         build:
             context: .
             dockerfile: docker/tests/Dockerfile
+            args:
+                - img=${PYTHON_IMG}
+                - work_dir=${CONTAINER_WORK_DIR}
         env_file: .env
         environment:
             CONTENT_APP_HOST: 0.0.0.0
