@@ -14,7 +14,7 @@ services:
     content_proxy:
         restart: "no"
         ports:
-            - ${CONTENT_APP_PORT}:8000
+            - ${CONTENT_APP_PORT}:${CONTENT_APP_PORT}
 
     content:
         restart: "no"
@@ -23,6 +23,7 @@ services:
         volumes:
             - ./src/${CONTENT_PKG_NAME}:/${CONTAINER_WORK_DIR}/src/${CONTENT_PKG_NAME}
 
+    #http://localhost:8001/api/v1/openapi
     postgres:
         restart: "no"
         volumes:

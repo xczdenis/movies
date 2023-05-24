@@ -6,7 +6,7 @@ server {
     root /;
 
     # Force trailing slash at the end
-    rewrite ^([^.\?]*[^/])$ $1/ permanent;
+    # rewrite ^([^.\?]*[^/])$ $1/ permanent;
 
     location / {
         proxy_pass http://${CONTENT_APP_HOST}:${CONTENT_APP_PORT}/;

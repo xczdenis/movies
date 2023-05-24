@@ -27,6 +27,8 @@ django-debug-toolbar = "^4.0.0"
 django-filter = "^23.2"
 psycopg2-binary = "^2.9.6"
 gunicorn = "^20.1.0"
+pyyaml = "^6.0"
+uritemplate = "^4.1.1"
 
 [tool.poetry.group.content.dependencies]
 fastapi = "^0.95.1"
