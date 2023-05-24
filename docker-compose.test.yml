@@ -3,7 +3,7 @@ services:
         platform: ${DOCKER_IMG_PLATFORM:-linux/amd64}
         build:
             context: .
-            dockerfile: ./docker/tests/Dockerfile
+            dockerfile: temp/Dockerfile
         env_file: .env
         environment:
             CONTENT_APP_HOST: 0.0.0.0
@@ -13,20 +13,10 @@ services:
             ELASTIC_HOST: elasticsearch
             ELASTIC_PORT: 9200
         depends_on:
-            elasticsearch:
-                condition: service_healthy
-            redis:
-                condition: service_started
+            - elasticsearch
+            - redis
         profiles:
             - tests
-        volumes:
-            - ./src:/src
-#            - ./docker/tests/scripts:/test_scripts
-#            - ./scripts:/scripts
-#        command: sh -c "
-#            . /test_scripts/wait-dependencies.sh
-#            && python src/main.py
-#            "
 
     postgres:
         volumes:
@@ -35,8 +25,8 @@ services:
     elasticsearch:
         volumes:
             - es_data_test:/usr/share/elasticsearch/data
-        ports:
-            - ${ELASTIC_PORT}:9200
+        environment:
+            xpack.security.enabled: "false"
 
     redis:
         volumes:
