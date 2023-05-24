@@ -3,7 +3,7 @@ services:
         platform: ${DOCKER_IMG_PLATFORM:-linux/amd64}
         build:
             context: .
-            dockerfile: temp/Dockerfile
+            dockerfile: docker/tests/Dockerfile
         env_file: .env
         environment:
             CONTENT_APP_HOST: 0.0.0.0
