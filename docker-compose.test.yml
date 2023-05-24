@@ -10,7 +10,7 @@ services:
         env_file: .env
         environment:
             CONTENT_APP_HOST: 0.0.0.0
-            CONTENT_APP_PORT: 8000
+            CONTENT_APP_PORT: ${CONTENT_APP_PORT}
             REDIS_HOST: redis
             REDIS_PORT: 6379
             ELASTIC_HOST: elasticsearch
