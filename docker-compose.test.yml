@@ -28,8 +28,6 @@ services:
     elasticsearch:
         volumes:
             - es_data_test:/usr/share/elasticsearch/data
-        environment:
-            xpack.security.enabled: "false"
 
     redis:
         volumes:
