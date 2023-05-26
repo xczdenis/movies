@@ -26,8 +26,8 @@ THIRD_PARTIES_APPS = [
 ]
 
 PROJECT_APPS = [
-    "movies.apps.MoviesConfig",
-    "management_commands.apps.ManagementCommandsConfig",
+    "adminpanel.movies.apps.MoviesConfig",
+    "adminpanel.management_commands.apps.ManagementCommandsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTIES_APPS + PROJECT_APPS
