@@ -1,0 +1,42 @@
+@startuml
+!include <cloudinsight/postgresql>
+!include <cloudinsight/python>
+!include <cloudinsight/mysql>
+!include <cloudinsight/nginx>
+!include <cloudinsight/elasticsearch>
+!include <logos/django>
+
+title Movies
+
+actor Client as user
+rectangle "<$nginx>\nnginx" as proxy #0b9748
+database "<$mysql>\ndemo-db" as demo_db
+queue ETL as etl
+queue ETL as etl2
+
+rectangle " " as services {
+
+    rectangle "Adminpanel" as adminpanel #45b78b {
+        database "<$postgresql>\nPostgreSQL" as postgres #31648c
+        rectangle "<$django>\nDjango" as django #0b4b33
+    }
+
+    rectangle "Content" as content #1ca9f5 {
+        rectangle "<$python>\nFastAPI" as fastapi #fed753
+        database "<$elasticsearch>\nElasticsearch" as elastic #f27eb3
+    }
+
+}
+
+user -down-> proxy
+
+proxy -down-> content
+proxy -down-> adminpanel
+
+demo_db --> etl
+etl -left-> postgres
+
+postgres -down-> etl2
+etl2 -left-> elastic
+
+@enduml
