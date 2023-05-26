@@ -1,52 +1,31 @@
 services:
     adminpanel_proxy:
         restart: "no"
-        ports:
-            - ${ADMINPANEL_APP_PORT}:8000
 
     adminpanel:
         restart: "no"
-        environment:
-            ENVIRONMENT: development
         volumes:
             - ./src/${ADMINPANEL_PKG_NAME}:/${CONTAINER_WORK_DIR}/src/${ADMINPANEL_PKG_NAME}
 
     content_proxy:
         restart: "no"
-        ports:
-            - ${CONTENT_APP_PORT}:${CONTENT_APP_PORT}
 
     content:
         restart: "no"
-        environment:
-            ENVIRONMENT: development
         volumes:
             - ./src/${CONTENT_PKG_NAME}:/${CONTAINER_WORK_DIR}/src/${CONTENT_PKG_NAME}
 
-    #http://localhost:8001/api/v1/openapi
     postgres:
         restart: "no"
-        volumes:
-            - postgres_data:/var/lib/postgresql/data
         ports:
             - ${POSTGRES_PORT}:5432
 
     elasticsearch:
         restart: "no"
-        volumes:
-            - es_data:/usr/share/elasticsearch/data
         ports:
             - ${ELASTIC_PORT}:9200
 
     redis:
         restart: "no"
-        volumes:
-            - redis_data:/data
         ports:
             - ${REDIS_PORT}:6379
-
-
-volumes:
-    postgres_data:
-    es_data:
-    redis_data:
