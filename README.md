@@ -56,9 +56,9 @@ Movies - это backend для онлайн кинотеатра, предост
     * **Elasticsearch** для полнотекстового поиска;
     * **Redis** для кэширования;
 * **CI** - workflow для GitHub Actions:
-    * [Lint by black](https://github.com/xczdenis/movies/blob/main/.github/workflows/lint.yml#LL8C13-L8C13);
-    * Lint by flake8;
-    * Тесты в докере;
+    * [Lint by black](https://github.com/xczdenis/movies/blob/main/.github/workflows/lint.yml#L8);
+    * [Lint by flake8](https://github.com/xczdenis/movies/blob/main/.github/workflows/lint.yml#L20);
+    * [Тесты в докере](https://github.com/xczdenis/movies/blob/main/.github/workflows/tests-with-docker.yml);
 * **SOLID** код;
 * **ETL процессы** для переноса данных между базами;
 * **Celery** для управления расписанием запуска ETL процессов;
