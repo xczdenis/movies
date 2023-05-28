@@ -11,16 +11,16 @@
     <img src="https://img.shields.io/static/v1?label=Redis&message=7%2B&color=%23D82C20&style=flat&logo=redis" alt="Redis">
 </a>
 <a href="https://www.docker.com/" target="_blank">
-    <img src="https://img.shields.io/static/v1?label=Docker&message=full&color=%232496ED&style=flat&logo=docker" alt="Docker">
+    <img src="https://img.shields.io/static/v1?label=Docker&message=23&color=%232496ED&style=flat&logo=docker" alt="Docker">
 </a>
 <a href="#">
     <img src="https://img.shields.io/static/v1?label=python&message=3.11^&color=%233674a8&style=flat&logo=python" alt="Supported Python versions">
 </a>
-<a href="https://python-poetry.org/">
-    <img src="https://img.shields.io/static/v1?label=package manager&message=poetry&color=%234c58ce&style=flat&logo=poetry" alt="Python Poetry">
-</a>
 <a href="https://black.readthedocs.io/en/stable/">
     <img src="https://img.shields.io/static/v1?label=style&message=black&color=black&style=flat&logo=python" alt="Supported Python versions">
+</a>
+<a href="https://python-poetry.org/">
+    <img src="https://img.shields.io/static/v1?label=package manager&message=poetry&color=%234c58ce&style=flat&logo=poetry" alt="Python Poetry">
 </a>
 
 
