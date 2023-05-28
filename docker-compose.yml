@@ -72,12 +72,12 @@ services:
         environment:
             CONTENT_APP_HOST: content
             CONTENT_APP_PORT: 8001
-            CONTENT_APP_LISTEN_PORT: ${CONTENT_APP_PORT}
+            CONTENT_APP_LISTEN_PORT: 80
         volumes:
             - ./docker/${CONTENT_PKG_NAME}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
             - ./docker/${CONTENT_PKG_NAME}/nginx/templates:/etc/nginx/templates:ro
         ports:
-            - ${CONTENT_APP_PORT}:${CONTENT_APP_PORT}
+            - 80:80
         depends_on:
             content:
                 condition: service_healthy

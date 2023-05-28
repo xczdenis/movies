@@ -16,7 +16,7 @@ router = APIRouter(prefix=f"/{NAMESPACE}", tags=["Persons"])
 
 
 @router.get(
-    "/",
+    "",
     name=make_rout_name(NAMESPACE, "list"),
     response_model=Page[PersonResponse],
     response_description="List of persons",
