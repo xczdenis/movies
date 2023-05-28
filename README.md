@@ -1,3 +1,29 @@
+<a href="https://www.djangoproject.com" target="_blank">
+    <img src="https://img.shields.io/static/v1?label=Django&message=4%2B&color=brightgreen&style=flat&logo=django" alt="Django">
+</a>
+<a href="https://fastapi.tiangolo.com/" target="_blank">
+    <img src="https://img.shields.io/static/v1?label=FastAPI&message=latest&color=%23079486&style=flat&logo=fastapi" alt="FastAPI">
+</a>
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html" target="_blank">
+    <img src="https://img.shields.io/static/v1?label=Elasticsearch&message=8.8&color=%23fed10c&style=flat&logo=elastic" alt="Elasticsearch">
+</a>
+<a href="https://redis.io/" target="_blank">
+    <img src="https://img.shields.io/static/v1?label=Redis&message=7%2B&color=%23D82C20&style=flat&logo=redis" alt="Redis">
+</a>
+<a href="https://www.docker.com/" target="_blank">
+    <img src="https://img.shields.io/static/v1?label=Docker&message=full&color=%232496ED&style=flat&logo=docker" alt="Docker">
+</a>
+<a href="#">
+    <img src="https://img.shields.io/static/v1?label=python&message=3.11^&color=%233674a8&style=flat&logo=python" alt="Supported Python versions">
+</a>
+<a href="https://python-poetry.org/">
+    <img src="https://img.shields.io/static/v1?label=package manager&message=poetry&color=%234c58ce&style=flat&logo=poetry" alt="Python Poetry">
+</a>
+<a href="https://black.readthedocs.io/en/stable/">
+    <img src="https://img.shields.io/static/v1?label=style&message=black&color=black&style=flat&logo=python" alt="Supported Python versions">
+</a>
+
+
 # Онлайн кинотеатр Movies
 
 
