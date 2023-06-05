@@ -328,6 +328,7 @@ migrate: db-update db-upgrade
 su:
 	@python src/adminpanel/manage.py create_superuser
 
+
 .PHONY: adminpanel
 adminpanel:
 	@python src/adminpanel/manage.py runserver ${ADMINPANEL_APP_HOST}:${ADMINPANEL_APP_PORT}
